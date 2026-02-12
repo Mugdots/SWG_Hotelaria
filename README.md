@@ -1,2 +1,2 @@
 # SWG_Hotelaria
-SWG_Hotelaria, também conhecido como **Sistema Web de Gestão de Hotelaria**
+SWG_Hotelaria, também conhecido como **Sistema Web de Gestão de Hotelaria** é um projeto proposto para o **Porto do Sol**, um hotel na cidade de Guarapari, Espirito Santo. O Sistema irá administrar e supervisionar clientes e funcionários pelo meio de **reservas de quarto**, o **processo do check-in e check-out**, como também de **serviço de limpeza**. O objetivo do sistema é agilizar os processos envolvidos por parte do cadastro (tanto como reserva e no momento) de clientes para vários tipos de quartos em um hotel, e da gerência e administração dos funcionários para serviço de limpeza.   
