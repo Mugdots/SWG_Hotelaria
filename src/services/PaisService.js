@@ -1,27 +1,27 @@
-import { Pais } from "../model/Pais.js";
+import { PaisIso } from "../models/Pais.js";
 
 class PaisService {
     static async findAll() {
-        const objs = await Pais.findAll({include: { all: true, nested: true}});
+        const objs = await PaisIso.findAll({include: { all: true, nested: true}});
         return objs;
     }
 
     static async findByPk(req, res) {
         const { id } = req.params;
-        const obj = await Pais.findByPk(id, {include: {all:true, nested:true}});
+        const obj = await PaisIso.findByPk(id, {include: {all:true, nested:true}});
         return obj;
     }
 
     static async create(req, res) {
         const { id, nome, sigla_iso2, sigla_iso3, ddi_telefone } = req.body;
-        const obj = await Pais.create({id, nome, sigla_iso2, sigla_iso3, ddi_telefone});
-        return await Pais.findByPk(obj.id, {include: { all:true, nested: true}});
+        const obj = await PaisIso.create({id, nome, sigla_iso2, sigla_iso3, ddi_telefone});
+        return await PaisIso.findByPk(obj.id, {include: { all:true, nested: true}});
     }
 
     static async update(req, res) {
         const { id } = req.params;
         const { nome, sigla_iso2, sigla_iso3, ddi_telefone } = req.body;
-        const obj = await Pais.findByPk(id, {include: {all: true, nested: true } });
+        const obj = await PaisIso.findByPk(id, {include: {all: true, nested: true } });
         if (obj == null) throw 'Uf não encontrada!';
         Object.assign(obj, {nome, sigla_iso2, sigla_iso3, ddi_telefone});
         return await obj.save();
@@ -29,7 +29,7 @@ class PaisService {
 
     static async delete(req, res) {
         const { id } = req.params;
-        const obj = await Pais.findByPk(id);
+        const obj = await PaisIso.findByPk(id);
         if (obj == null) throw 'Uf não encontrada!';
         try {
             await obj.destroy();

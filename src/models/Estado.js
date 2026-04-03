@@ -33,7 +33,7 @@ class Estado extends Model { // Nome: Erick Fernandes
     static associate(models) {
         //this.belongsTo(models.cidade, {as: 'cidade', foreignKey: {name: 'cidadeId' , allowNull: false, validate: {notNull: {msg: 'Cidade do Bairro deve ser preenchida!'}}}});
 
-        this.belongsTo(models.pais, {as: 'pais', foreignKey: 'paisId', allowNull: false, validate: {notNull: {msg: 'Cidade do Bairro deve ser preenchida!'}}});
+        this.belongsTo(models.paisiso, {as: 'pais', foreignKey: 'paisId', allowNull: false, validate: {notNull: {msg: 'Cidade do Bairro deve ser preenchida!'}}});
     }
 
 }

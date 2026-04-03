@@ -18,8 +18,8 @@ class Quarto extends Model { // Nome: Erick Fernandes
     //this.belongsTo(models.bairro, {as: 'bairro', foreignKey: {name: 'bairroId' , allowNull: false, validate: {notNull: {msg: 'Bairro do Cliente deve ser preenchido!'}}}});
     //this.hasMany(models.telefone, {as: 'telefones', onDelete: 'CASCADE', onUpdate: 'CASCADE'});
 
-    this.belongsTo(models.Estadia, {});
-    this.belongsTo(models.tipodequarto, {as: 'tipodequarto', foreignKey: 'tipodequartoId', allowNull: false, validate: {notNull: {msg: 'Tipo de Quarto deve ser preenchido!'}}});
+    this.belongsTo(models.estadia, {as : 'estadia', foreignKey: 'estadiaId', allowNull: true, validate: {notNull: {msg: 'Estadia deve ser preenchida!'}}});
+    this.belongsTo(models.tipoDeQuarto, {as: 'tipoDeQuarto', foreignKey: 'tipoDeQuartoId', allowNull: false, validate: {notNull: {msg: 'Tipo de Quarto deve ser preenchido!'}}});
   }
   
 }
