@@ -1,8 +1,7 @@
 import Sequelize from 'sequelize';
 import { databaseConfig } from "./database-config.js";
-
 import { Funcionario } from '../models/funcionario.js';
-import { PaisIso } from '../models/pais.js';
+import { PaisIso } from '../models/PaisIso.js';
 import { OrdemLimpeza } from '../models/OrdemLimpeza.js';
 import { Quarto } from '../models/Quarto.js';
 import * as fs from 'fs';
@@ -15,8 +14,8 @@ const sequelize = new Sequelize(databaseConfig);
 // Cliente.init(sequelize);
 Funcionario.init(sequelize);
 PaisIso.init(sequelize);
-Quarto.init(sequelize);
-OrdemLimpeza.init(sequelize);
+//Quarto.init(sequelize);
+//OrdemLimpeza.init(sequelize);
 // Gerente.init(sequelize);
 // Telefone.init(sequelize);
 // TipoDeFilme.init(sequelize);
@@ -37,8 +36,8 @@ OrdemLimpeza.init(sequelize);
 // Cliente.associate(sequelize.models);
 Funcionario.associate(sequelize.models);
 PaisIso.associate(sequelize.models);
-Quarto.associate(sequelize.models);
-OrdemLimpeza.associate(sequelize.models);
+//Quarto.associate(sequelize.models);
+//OrdemLimpeza.associate(sequelize.models);
 // Gerente.associate(sequelize.models);
 // Telefone.associate(sequelize.models);
 // TipoDeFilme.associate(sequelize.models);
@@ -70,16 +69,16 @@ function databaseInserts() {
         const f3 = await Funcionario.create({ nome: "Funcionário João", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Cachoeiro de Itapemirim", bairro:"Ibitiquara", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
         const f4 = await Funcionario.create({ nome: "Funcionário José", data_nascimento: "1985-02-02", cpf: "444.444.444-44", cidade: "Marataizes",  bairro:"Abumbum", rua: "Rua José Figueiredo", telefone: "(22) 2222-2222" ,login: "func2", senha: "123456", paisisoId:4 });
         
-        const q1 = await Quarto.create({nome: "Quarto 101"});
-        const q2 = await Quarto.create({nome: "Quarto 201"});
-        const q3 = await Quarto.create({nome: "Quarto 302"});
-        const q4 = await Quarto.create({nome: "Quarto 405"});
+        // const q1 = await Quarto.create({nome: "Quarto 101"});
+        // const q2 = await Quarto.create({nome: "Quarto 201"});
+        // const q3 = await Quarto.create({nome: "Quarto 302"});
+        // const q4 = await Quarto.create({nome: "Quarto 405"});
 
 
-        const ol1 = await OrdemLimpeza.create({status: "Concluido", observacao:"SADASDASDASDASDASDASD", inicio:"2026-02-22 08:32:45", fim:"2026-02-22 10:32:25", funcionarioId: 1, quartoId: 1});
-        const ol2 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-25 07:32:45", fim:"2026-02-25 9:28:25", funcionarioId: 2, quartoId: 1});
-        const ol3 = await OrdemLimpeza.create({status: "Não Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 19:00:00", funcionarioId: 3, quartoId: 2});
-        const ol4 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 10:32:25", funcionarioId: 3, quartoId: 2});
+        // const ol1 = await OrdemLimpeza.create({status: "Concluido", observacao:"SADASDASDASDASDASDASD", inicio:"2026-02-22 08:32:45", fim:"2026-02-22 10:32:25", funcionarioId: 1, quartoId: 1});
+        // const ol2 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-25 07:32:45", fim:"2026-02-25 9:28:25", funcionarioId: 2, quartoId: 1});
+        // const ol3 = await OrdemLimpeza.create({status: "Não Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 19:00:00", funcionarioId: 3, quartoId: 2});
+        // const ol4 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 10:32:25", funcionarioId: 3, quartoId: 2});
         
 
 

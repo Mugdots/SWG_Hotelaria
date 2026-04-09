@@ -1,8 +1,9 @@
-import {PaisService} from "../services/PaisService.js";
+import { PaisService } from "../services/PaisService.js";
 
 class PaisController {
     
     static async findAll(req, res) {
+        console.log("findall");
         PaisService.findAll()
             .then(objs => res.json(objs))
             .catch(err => res.status(400).json({ err }));

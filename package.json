@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^4.22.1",
+    "node.js": "^0.0.1-security",
     "pg": "^8.20.0",
     "sequelize": "^6.37.8",
     "sqlite3": "^5.1.7"
