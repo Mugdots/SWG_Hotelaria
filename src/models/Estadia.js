@@ -31,8 +31,8 @@ class Estadia extends Model { // Nome: Erick Fernandes
     //this.belongsTo(models.bairro, {as: 'bairro', foreignKey: {name: 'bairroId' , allowNull: false, validate: {notNull: {msg: 'Bairro do Cliente deve ser preenchido!'}}}});
     //this.hasMany(models.telefone, {as: 'telefones', onDelete: 'CASCADE', onUpdate: 'CASCADE'});
 
-    this.belongsTo(models.Reserva, {});
-    this.belongsTo(models.Funcionario, {});
+    this.belongsTo(models.reserva, {});
+    this.belongsTo(models.funcionario, {});
   }
   
 }

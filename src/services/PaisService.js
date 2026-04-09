@@ -3,17 +3,21 @@ import { PaisIso } from "../models/PaisIso.js";
 class PaisService {
     static async findAll() {
         const objs = await PaisIso.findAll({include: { all: true, nested: true}});
+        const objs = await PaisIso.findAll({include: { all: true, nested: true}});
         return objs;
     }
 
     static async findByPk(req, res) {
         const { id } = req.params;
         const obj = await PaisIso.findByPk(id, {include: {all:true, nested:true}});
+        const obj = await PaisIso.findByPk(id, {include: {all:true, nested:true}});
         return obj;
     }
 
     static async create(req, res) {
         const { id, nome, sigla_iso2, sigla_iso3, ddi_telefone } = req.body;
+        const obj = await PaisIso.create({id, nome, sigla_iso2, sigla_iso3, ddi_telefone});
+        return await PaisIso.findByPk(obj.id, {include: { all:true, nested: true}});
         const obj = await PaisIso.create({id, nome, sigla_iso2, sigla_iso3, ddi_telefone});
         return await PaisIso.findByPk(obj.id, {include: { all:true, nested: true}});
     }
