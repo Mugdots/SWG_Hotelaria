@@ -6,7 +6,9 @@ class Reserva extends Model {
     super.init({
       entradaAcomodacao: { 
         type: DataTypes.DATEONLY, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Data de entrada da Reserva deve ser preenchida!" },
           notEmpty: { msg: "Data de entrada da Reserva deve ser preenchida!" },
           isDate: { msg: "Data de entrada da Reserva deve ser preenchida!" },
           is: {args: ["[0-9]{4}\-[0-9]{2}\-[0-9]{2}"], msg: "Data de entrada da Reserva deve seguir o padrão yyyy-MM-dd!" }
@@ -14,7 +16,9 @@ class Reserva extends Model {
       },
       saidaAcomodacao: { 
         type: DataTypes.DATEONLY, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Data de saída da Reserva deve ser preenchida!" },
           notEmpty: { msg: "Data de saída da Reserva deve ser preenchida!" },
           isDate: { msg: "Data de saída da Reserva deve ser preenchida!" },
           is: {args: ["[0-9]{4}\-[0-9]{2}\-[0-9]{2}"], msg: "Data de saída da Reserva deve seguir o padrão yyyy-MM-dd!" }
@@ -22,7 +26,9 @@ class Reserva extends Model {
       },
       numeroPessoas: { 
         type: DataTypes.INTEGER, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "O Número de pessoas da Reserva deve ser preenchido!" },
           notEmpty: { msg: "O Número de pessoas da Reserva deve ser preenchido!" },
           isInt: { msg: "Número de pessoas da Reserva deve ser um número inteiro!" },
           min: { args: [1], msg: "Número de pessoas da Reserva deve ser no mínimo 1!" }

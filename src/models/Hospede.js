@@ -6,14 +6,18 @@ class Hospede extends Model {
     super.init({
       nome: { 
         type: DataTypes.STRING, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Nome do Hospede deve ser preenchido!" },
           notEmpty: { msg: "Nome do Hospede deve ser preenchido!" },
           len: { args: [2, 50], msg: "Nome do Hospede deve ter entre 2 e 50 letras!" }
         }
       },
       cpfPassaporte: { 
         type: DataTypes.STRING, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "CPF ou Passaporte do Hóspede deve ser preenchido!" },
           notEmpty: { msg: "CPF ou Passaporte do Hóspede deve ser preenchido!" },
           isValidDocument(value) {
             // Padrão Brasileiro de CPF: NNN.NNN.NNN-NN
@@ -31,21 +35,27 @@ class Hospede extends Model {
       },
       email: { 
         type: DataTypes.STRING, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Email do Hospede deve ser preenchido!" },
           notEmpty: { msg: "Email do Hospede deve ser preenchido!" },
           isEmail: { msg: "Email do Hospede deve ser um email válido!" }
         }
       },
       telefone: { 
         type: DataTypes.STRING, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Telefone do Hospede deve ser preenchido!" },
           notEmpty: { msg: "Telefone do Hospede deve ser preenchido!" },
           is: {args: ["^\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}$"], msg: "Telefone do Hospede deve seguir o padrão (XX) XXXXX-XXXX!" }
         }
       },
       nascimento: { 
         type: DataTypes.DATEONLY, 
+        allowNull: false,
         validate: {
+          notNull: { msg: "Nascimento do Hospede deve ser preenchido!" },
           notEmpty: { msg: "Nascimento do Hospede deve ser preenchido!" },
           isDate: { msg: "Nascimento do Hospede deve ser preenchido!" },
           is: {args: ["[0-9]{4}\-[0-9]{2}\-[0-9]{2}"], msg: "Nascimento do Hospede deve seguir o padrão yyyy-MM-dd!" }
