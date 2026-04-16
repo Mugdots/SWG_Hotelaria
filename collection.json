@@ -1,0 +1,329 @@
+{
+  "info": {
+    "_postman_id": "bce44d3e-c770-4cd5-9df7-0bbdcf4bfb35",
+    "name": "SWG - Hotelaria_Request01",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54077987"
+  },
+  "item": [
+    {
+      "name": "Tipo de Quarto",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar novo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Familia\",\r\n    \"descricao\": \"Quarto enorme familia\",\r\n    \"precoDiaria\": 500,\r\n    \"capacidadeMax\": 6,\r\n    \"tipoCama\": \"1 Cama king, 1 Casal e 1 Solteito\",\r\n    \"tamanho\": 40\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Com Error",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"descricao\": \"\",\r\n    \"precoDiaria\": \"\",\r\n    \"capacidadeMax\": \"\",\r\n    \"tamanho\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto/6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Familia Grande\",\r\n    \"descricao\": \"Quarto enorme familia, com bela vista\",\r\n    \"precoDiaria\": 550,\r\n    \"capacidadeMax\": 6,\r\n    \"tipoCama\": \"1 Cama king, 1 Casal e 1 Solteito\",\r\n    \"tamanho\": 40\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/tipo-de-quarto/6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "tipo-de-quarto",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Hospede",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/hospede",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por Estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/hospede/estado/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede",
+                "estado",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/hospede/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar novo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Ariana Grande\",\r\n    \"cpfPassaporte\": \"555.555.555-55\",\r\n    \"email\": \"email5@gmail.com\",\r\n    \"telefone\": \"(55) 55555-5555\",\r\n    \"nascimento\": \"2005-05-05\",\r\n    \"estado\": {\r\n        \"id\": 1\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/hospede",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Com Error",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cpfPassaporte\": \"555.555.555-555\",\r\n    \"email\": \"\",\r\n    \"telefone\": \"(55) 55555-55555\",\r\n    \"nascimento\": \"2005-05-05\",\r\n    \"estado\": {\r\n        \"id\": \"\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/hospede",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Ariana Pequena\",\r\n    \"cpfPassaporte\": \"555.555.555-56\",\r\n    \"email\": \"email6@gmail.com\",\r\n    \"telefone\": \"(55) 55555-5555\",\r\n    \"nascimento\": \"2005-05-05\",\r\n    \"estado\": {\r\n        \"id\": 2\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/hospede/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/hospede/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "hospede",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
