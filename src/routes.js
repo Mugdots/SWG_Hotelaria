@@ -3,6 +3,7 @@ import express from "express";
 import { PaisController } from './controllers/PaisController.js';
 import { HospedeController } from "./controllers/HospedeController.js";
 import { TipoDeQuartoController } from "./controllers/TipoDeQuartoController.js";
+import { FuncionarioController } from "./controllers/FuncionarioController.js";
 
 const routes = express.Router();
 
@@ -20,6 +21,12 @@ routes.get('/hospede/estado/:id', HospedeController.findByEstado);
 routes.post('/hospede', HospedeController.create);
 routes.put('/hospede/:id', HospedeController.update);
 routes.delete('/hospede/:id', HospedeController.delete);
+
+routes.get('/funcionario', FuncionarioController.findAll);
+routes.get('/funcionario/:id', FuncionarioController.findByPk);
+routes.post('/funcionario', FuncionarioController.create);
+routes.put('/funcionario/:id', FuncionarioController.update);
+routes.delete('/funcionario/:id', FuncionarioController.delete)
 
 routes.get('/pais', PaisController.findAll);
 routes.get('/pais/:id', PaisController.findByPk);

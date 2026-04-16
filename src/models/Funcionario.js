@@ -67,7 +67,7 @@ class Funcionario extends Model {
     }
 
     static associate(models) {
-      //  this.belongsTo(models.paisiso, {as: 'paisiso', foreignKey: {name: 'paisisoId', allowNull: false, validate: {notEmpty: {msg: "Pais do Funcionário deve ser preenchido!"}}}});
+      this.belongsTo(models.paisiso, {as: 'paisiso', foreignKey: {name: 'paisisoId', allowNull: false, validate: {notEmpty: {msg: "Pais do Funcionário deve ser preenchido!"}}}});
 
     }
 
