@@ -21,7 +21,7 @@ class HospedeService {
     static async create(req, res) {     
         const { nome, cpfPassaporte, email, telefone, nascimento, estado } = req.body;
         if (estado == null) throw 'Estado deve ser preenchido!';
-        const obj = await Hospede.create({id, nome, cpfPassaporte, email, telefone, nascimento, estadoId: estado.id});
+        const obj = await Hospede.create({ nome, cpfPassaporte, email, telefone, nascimento, estadoId: estado.id});
         return await Hospede.findByPk(obj.id, {include: { all:true, nested: true}});
     }
 

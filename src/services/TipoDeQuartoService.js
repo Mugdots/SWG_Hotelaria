@@ -13,17 +13,17 @@ class TipoDeQuartoService {
     }   
 
     static async create(req, res) {     
-        const { nome, descricao, precoDiaria, capaxidadeMax, tipoCama, tamanho } = req.body;
-        const obj = await TipoDeQuarto.create({nome, descricao, precoDiaria, capaxidadeMax, tipoCama, tamanho});
+        const { nome, descricao, precoDiaria, capacidadeMax, tipoCama, tamanho } = req.body;
+        const obj = await TipoDeQuarto.create({nome, descricao, precoDiaria, capacidadeMax, tipoCama, tamanho});
         return await TipoDeQuarto.findByPk(obj.id, {include: { all:true, nested: true}});
     }
 
     static async update(req, res) {
         const { id } = req.params;
-        const { nome, descricao, precoDiaria, capaxidadeMax, tipoCama, tamanho } = req.body;
+        const { nome, descricao, precoDiaria, capacidadeMax, tipoCama, tamanho } = req.body;
         const obj = await TipoDeQuarto.findByPk(id, {include: {all: true, nested: true } });
         if (obj == null) throw 'Tipo de quarto não encontrado!';
-        Object.assign(obj, {nome, descricao, precoDiaria, capaxidadeMax, tipoCama, tamanho});
+        Object.assign(obj, {nome, descricao, precoDiaria, capacidadeMax, tipoCama, tamanho});
         await obj.save();
         return await TipoDeQuarto.findByPk(id, {include: {all: true, nested: true } });
     }       
