@@ -1,4 +1,4 @@
-import { TipoDeQuartoService } from "../services/TipoDeQuartoService";
+import { TipoDeQuartoService } from "../services/TipoDeQuartoService.js";
 
 class TipoDeQuartoController {
 

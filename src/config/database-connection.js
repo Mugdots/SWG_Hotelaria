@@ -6,7 +6,7 @@ import { Reserva } from '../models/Reserva.js';
 import { TipoDeQuarto } from '../models/TipoDeQuarto.js'
 import { Estado } from '../models/Estado.js'
 import { Funcionario } from '../models/Funcionario.js';
-import { PaisIso } from '../models/Pais.js';
+import { PaisIso } from '../models/PaisIso.js';
 import { OrdemLimpeza } from '../models/OrdemLimpeza.js';
 import { Quarto } from '../models/Quarto.js';
 import { Estadia } from '../models/Estadia.js';
@@ -20,6 +20,7 @@ TipoDeQuarto.init(sequelize);
 Estado.init(sequelize);
 Funcionario.init(sequelize);
 PaisIso.init(sequelize);
+Estadia.init(sequelize);
 Quarto.init(sequelize);
 OrdemLimpeza.init(sequelize);
 // Gerente.init(sequelize);
@@ -43,19 +44,16 @@ OrdemLimpeza.init(sequelize);
 
 Hospede.associate(sequelize.models);
 Reserva.associate(sequelize.models);
+Estado.associate(sequelize.models);
 Funcionario.associate(sequelize.models);
 PaisIso.associate(sequelize.models);
-Quarto.associate(sequelize.models);
 Estadia.associate(sequelize.models);
+Quarto.associate(sequelize.models);
 OrdemLimpeza.associate(sequelize.models);
 // Uf.associate(sequelize.models);
 // Cidade.associate(sequelize.models);
 // Bairro.associate(sequelize.models);
 // Cliente.associate(sequelize.models);
-Funcionario.associate(sequelize.models);
-PaisIso.associate(sequelize.models);
-Quarto.associate(sequelize.models);
-OrdemLimpeza.associate(sequelize.models);
 // Gerente.associate(sequelize.models);
 // Telefone.associate(sequelize.models);
 // TipoDeFilme.associate(sequelize.models);
@@ -81,10 +79,10 @@ function databaseInserts() {
         const p3 = await PaisIso.create({ nome: "Espanha", sigla_iso2: 'ES', sigla_iso3: 'ESP', ddi_telefone: 34 });
         const p4 = await PaisIso.create({ nome: "Ingraterra", sigla_iso2: 'GB', sigla_iso3: 'GBR', ddi_telefone: 44 });
         
-        const e1 = await Estado.create({ nomeEstado: "Espírito Santo", siglaUf: "ES", regiaoGeografica: "Sudeste", paisId: 1 });
-        const e2 = await Estado.create({ nomeEstado: "São Paulo", siglaUf: "SP", regiaoGeografica: "Sudeste", paisId: 1 });
-        const e3 = await Estado.create({ nomeEstado: "Nova York", siglaUf: "NY", regiaoGeografica: "Norte", paisId: 2 });
-        const e4 = await Estado.create({ nomeEstado: "Califórnia", siglaUf: "CA", regiaoGeografica: "Oeste", paisId: 2 });
+        const e1 = await Estado.create({ nomeEstado: "Espírito Santo", siglaUf: "ES", regiaoGeografica: "Sudeste", paisisoId: 1 });
+        const e2 = await Estado.create({ nomeEstado: "São Paulo", siglaUf: "SP", regiaoGeografica: "Sudeste", paisisoId: 1 });
+        const e3 = await Estado.create({ nomeEstado: "Nova York", siglaUf: "NY", regiaoGeografica: "Norte", paisisoId: 2 });
+        const e4 = await Estado.create({ nomeEstado: "Califórnia", siglaUf: "CA", regiaoGeografica: "Oeste", paisisoId: 2 });
         
         // Inserindo Tipo de Quarto no banco de dados de forma direta
         const tipoDeQuarto1 = await TipoDeQuarto.create({ 
@@ -178,8 +176,8 @@ function databaseInserts() {
         });
 
         const reserva2 = await Reserva.create({ 
-            entradaAcomodacao: "2026-9-15",
-            saidaAcomodacao: "2026-9-25",
+            entradaAcomodacao: "2026-09-15",
+            saidaAcomodacao: "2026-09-25",
             numeroPessoas: "2",
             observacao: "Hóspedes solicitam cama de casal.",
             hospedeId: 2,
@@ -187,8 +185,8 @@ function databaseInserts() {
         });
 
         const reserva3 = await Reserva.create({ 
-            entradaAcomodacao: "2026-6-2",
-            saidaAcomodacao: "2026-6-30",
+            entradaAcomodacao: "2026-06-02",
+            saidaAcomodacao: "2026-06-30",
             numeroPessoas: "1",
             observacao: "Reserva para estadia longa.",
             hospedeId: 3,
@@ -196,8 +194,8 @@ function databaseInserts() {
         });
 
         const reserva4 = await Reserva.create({ 
-            entradaAcomodacao: "2026-4-30",
-            saidaAcomodacao: "2026-5-2",
+            entradaAcomodacao: "2026-04-30",
+            saidaAcomodacao: "2026-05-02",
             numeroPessoas: "3",
             observacao: "Check-in com preferência por quarto silencioso.",
             hospedeId: 4,

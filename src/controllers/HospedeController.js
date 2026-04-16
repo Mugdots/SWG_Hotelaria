@@ -1,4 +1,4 @@
-import { HospedeService } from "../services/HospedeService";
+import { HospedeService } from "../services/HospedeService.js";
 
 class HospedeController {
     
