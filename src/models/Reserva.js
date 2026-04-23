@@ -39,6 +39,17 @@ class Reserva extends Model {
         validate: {
           len: { args: [0, 255], msg: "Observação da Reserva deve ter no máximo 255 caracteres!" }
         }
+      },
+      status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          isIn: {
+            args: [[0, 1]],
+            msg: "Status deve ser 0 (Pendente) ou 1 (Confirmada)!"
+          }
+        }
       }
     }, { sequelize, modelName: 'reserva', tableName: 'reservas' })
   }
