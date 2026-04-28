@@ -31,8 +31,9 @@ class Estadia extends Model { // Nome: Erick Fernandes
     //this.belongsTo(models.bairro, {as: 'bairro', foreignKey: {name: 'bairroId' , allowNull: false, validate: {notNull: {msg: 'Bairro do Cliente deve ser preenchido!'}}}});
     //this.hasMany(models.telefone, {as: 'telefones', onDelete: 'CASCADE', onUpdate: 'CASCADE'});
 
-    this.belongsTo(models.reserva, {});
-    this.belongsTo(models.funcionario, {});
+    this.belongsTo(models.reserva, {as: 'reserva', foreignKey: {name: 'reservaId', validate: {notNull: {msg: 'O número da Reserva deve ser preenchida!'}}}});
+    this.belongsTo(models.funcionario, {as: 'funcionario', foreignKey: {name: 'funcionarioId', validate: {notNull: {msg: 'A estadia deve ter um funcionário associado!'}}}});
+    this.belongsTo(models.quarto, {as: 'quarto', foreignKey: {name: 'quartoId', validate: {notNull: {msg: 'A estadia deve ter um quarto associado!'}}}})
   }
   
 }
