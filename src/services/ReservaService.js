@@ -1,6 +1,7 @@
 import { QueryTypes } from 'sequelize';
 import sequelize from '../config/database-connection.js';
 import { Reserva } from '../models/Reserva.js';
+import { TipoDeQuarto } from '../models/TipoDeQuarto.js';
 
 export class ReservaService {
 
@@ -77,6 +78,8 @@ export class ReservaService {
 
 
     static async validarRegrasDeReserva(dadosReserva) {
+        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
+
         const disponibilidade = await this.verificarDisponibilidade(dadosReserva);
         if (!disponibilidade.disponivel) {
             throw 'Não há quartos disponíveis para este tipo no período selecionado. Escolha outro período ou outro tipo de quarto.';
@@ -248,6 +251,29 @@ export class ReservaService {
             dataConfirmacao: dataEntradaAlvo,
             mensagem: 'Reservas confirmadas automaticamente para 10 dias antes da entrada.'
         };
+    }
+
+    // RN04 (Capacidade Máxima por Tipo de Quarto): Número de Pessoas da Reserva não pode exceder a capacidade máxima do tipo de quarto.
+    static async validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva) {
+        const { tipoDeQuartoId, numeroPessoas } = dadosReserva;
+
+        if (!tipoDeQuartoId) {
+            throw 'Tipo de quarto deve ser preenchido!';
+        }
+
+        if (numeroPessoas == null) {
+            throw 'Número de pessoas deve ser preenchido!';
+        }
+
+        const tipoDeQuarto = await TipoDeQuarto.findByPk(tipoDeQuartoId);
+        if (!tipoDeQuarto) {
+            throw 'Tipo de quarto informado não existe!';
+        }
+
+        const capacidadeMaxima = Number(tipoDeQuarto.capacidadeMax);
+        if (Number(numeroPessoas) > capacidadeMaxima) {
+            throw `O número de pessoas informado (${numeroPessoas}) excede a capacidade máxima do tipo de quarto (${capacidadeMaxima}).`;
+        }
     }
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
