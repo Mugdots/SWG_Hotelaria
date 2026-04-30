@@ -324,6 +324,244 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Reserva",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/reserva",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/reserva/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar novo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-10\",\r\n\"saidaAcomodacao\": \"2026-05-15\",\r\n\"numeroPessoas\": 2,\r\n\"observacao\": \"Reserva teste\",\r\n\"hospedeId\": 3,\r\n\"tipoDeQuartoId\": 3\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Com Error",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"\",\r\n\"saidaAcomodacao\": \"\",\r\n\"hospedeId\": 2,\r\n\"tipoDeQuartoId\": 3\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create com RN01",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-11\",\r\n\"saidaAcomodacao\": \"2026-05-14\",\r\n\"numeroPessoas\": 3,\r\n\"observacao\": \"Reserva teste 2\",\r\n\"hospedeId\": 2,\r\n\"tipoDeQuartoId\": 3\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create com RN02",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-11\",\r\n\"saidaAcomodacao\": \"2026-05-18\",\r\n\"numeroPessoas\": 2,\r\n\"observacao\": \"Reserva teste 2\",\r\n\"hospedeId\": 3,\r\n\"tipoDeQuartoId\": 1\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create com RN04",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-11\",\r\n\"saidaAcomodacao\": \"2026-05-18\",\r\n\"numeroPessoas\": 6,\r\n\"observacao\": \"Reserva teste 2\",\r\n\"hospedeId\": 1,\r\n\"tipoDeQuartoId\": 5\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-20\",\r\n\"saidaAcomodacao\": \"2026-05-25\",\r\n\"numeroPessoas\": 2,\r\n\"observacao\": \"Atualizada\",\r\n\"hospedeId\": 3,\r\n\"tipoDeQuartoId\": 2\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/reserva/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
