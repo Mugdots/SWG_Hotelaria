@@ -100,16 +100,9 @@ export class ReservaService {
     }
     
     static validarPeriodoReserva(entradaAcomodacao, saidaAcomodacao) {
-        if (!entradaAcomodacao || !saidaAcomodacao) {
-            throw 'Entrada e saída da acomodação devem ser preenchidas!';
-        }
 
         const dataEntrada = new Date(entradaAcomodacao);
         const dataSaida = new Date(saidaAcomodacao);
-
-        if (Number.isNaN(dataEntrada.getTime()) || Number.isNaN(dataSaida.getTime())) {
-            throw 'Período da reserva inválido!';
-        }
 
         if (dataEntrada >= dataSaida) {
             throw 'A data de saída deve ser maior que a data de entrada!';
@@ -128,10 +121,6 @@ export class ReservaService {
     // RN01 (Disponibilidade): O hotel só pode confirmar uma nova reserva se houverem quartos vagos na categoria escolhida para o período solicitado.
     static async verificarDisponibilidade(dadosReserva) {
         const { tipoDeQuartoId, entradaAcomodacao, saidaAcomodacao, reservaIdIgnorar } = dadosReserva;
-
-        if (!tipoDeQuartoId) {
-            throw 'Tipo de quarto deve ser preenchido!';
-        }
 
         this.validarPeriodoReserva(entradaAcomodacao, saidaAcomodacao);
 
@@ -257,13 +246,6 @@ export class ReservaService {
     static async validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva) {
         const { tipoDeQuartoId, numeroPessoas } = dadosReserva;
 
-        if (!tipoDeQuartoId) {
-            throw 'Tipo de quarto deve ser preenchido!';
-        }
-
-        if (numeroPessoas == null) {
-            throw 'Número de pessoas deve ser preenchido!';
-        }
 
         const tipoDeQuarto = await TipoDeQuarto.findByPk(tipoDeQuartoId);
         if (!tipoDeQuarto) {
