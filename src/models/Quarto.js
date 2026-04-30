@@ -12,8 +12,8 @@ class Quarto extends Model { // Nome: Erick Fernandes
           notEmpty: { msg: "Número do quarto deve ser preenchido!" }
         }
       },
-      andar: { 
-        type: DataTypes.INTEGER, 
+      andar: {
+        type: DataTypes.INTEGER,
         validate: {
           isInt: { msg: "Número do andar deve ser preenchido!" },
           min: { args: [1], msg: "Número do andar deve ter no mínimo 1 dígito!" }
@@ -23,6 +23,13 @@ class Quarto extends Model { // Nome: Erick Fernandes
         type: DataTypes.ENUM('Disponivel', 'Ocupado', 'Limpeza', 'Manutencao'),
         allowNull: false,
         defaultValue: 'Disponivel'
+      },
+      tipoDeQuartoId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'Tipo de Quarto deve ser preenchido!' }
+        }
       }
     }, { sequelize, modelName: 'quarto', tableName: 'quartos' })
   }
@@ -32,10 +39,10 @@ class Quarto extends Model { // Nome: Erick Fernandes
     //this.hasMany(models.telefone, {as: 'telefones', onDelete: 'CASCADE', onUpdate: 'CASCADE'});
 
     //this.belongsTo(models.estadia, {as : 'estadia', foreignKey: 'estadiaId', allowNull: true, validate: {notNull: {msg: 'Estadia deve ser preenchida!'}}});
-    this.hasMany(models.estadia, { foreignKey: 'quartoId', as: 'estadias'});
-    this.belongsTo(models.tipoDeQuarto, {as: 'tipoDeQuarto', foreignKey: 'tipoDeQuartoId', allowNull: false, validate: {notNull: {msg: 'Tipo de Quarto deve ser preenchido!'}}});
+    this.hasMany(models.estadia, { foreignKey: 'quartoId', as: 'estadias' });
+    this.belongsTo(models.tipoDeQuarto, { as: 'tipoDeQuarto', foreignKey: { name: 'tipoDeQuartoId', allowNull: false } });
   }
-  
+
 }
 
 export { Quarto };

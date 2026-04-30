@@ -213,7 +213,7 @@ function databaseInserts() {
         // const q4 = await Quarto.create({nome: "Quarto 405"});
 
         const q1 = await Quarto.create({ 
-            numero: "101", 
+            numero: "101",
             andar: 1,
             status_quarto: "Disponivel",
             tipoDeQuartoId: tipoDeQuarto1.id

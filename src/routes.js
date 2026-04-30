@@ -4,6 +4,8 @@ import { PaisController } from './controllers/PaisController.js';
 import { HospedeController } from "./controllers/HospedeController.js";
 import { TipoDeQuartoController } from "./controllers/TipoDeQuartoController.js";
 import { FuncionarioController } from "./controllers/FuncionarioController.js";
+import { EstadoController } from './controllers/EstadoController.js';
+import { QuartoController } from './controllers/QuartoController.js';
 
 const routes = express.Router();
 
@@ -33,5 +35,17 @@ routes.get('/pais/:id', PaisController.findByPk);
 routes.post('/pais', PaisController.create);
 routes.put('/pais/:id', PaisController.update);
 routes.delete('/pais/:id', PaisController.delete);
+
+routes.get('/estado', EstadoController.findAll);
+routes.get('/estado/:id', EstadoController.findByPk);
+routes.post('/estado', EstadoController.create);
+routes.put('/estado/:id', EstadoController.update);
+routes.delete('/estado/:id', EstadoController.delete);
+
+routes.get('/quarto', QuartoController.findAll);
+routes.get('/quarto/:id', QuartoController.findByPk);
+routes.post('/quarto', QuartoController.create);
+routes.put('/quarto/:id', QuartoController.update);
+routes.delete('/quarto/:id', QuartoController.delete);
 
 export default routes;
