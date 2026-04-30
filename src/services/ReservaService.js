@@ -16,18 +16,20 @@ export class ReservaService {
     }
 
     static async create(req) {
-        const dadosNovaReserva = req.body;
-        dadosNovaReserva.status = 0;
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status: 0 };
 
         await this.validarRegrasDeReserva(dadosNovaReserva);
 
-        const reservaCriada = await Reserva.create(dadosNovaReserva);
-        return reservaCriada;
+        return await Reserva.create(dadosNovaReserva);
     }   
 
     static async update(req) {
         const { id } = req.params;
-        const dadosAtualizacao = req.body;
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+
+        const dadosAtualizacao = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId };
+
         const reservaAtual = await Reserva.findByPk(id);
         if (!reservaAtual) {
             return null;
@@ -38,7 +40,7 @@ export class ReservaService {
 
         await reservaAtual.update(dadosAtualizacao);
         return reservaAtual;
-    }   
+    }
 
     static async delete(req) {
         const { id } = req.params;
@@ -149,6 +151,24 @@ export class ReservaService {
               AND entradaAcomodacao < ?
               AND saidaAcomodacao > ?
         `;
+
+        // FROM reservas
+        // Ele olha na tabela de reservas.
+
+        // WHERE tipoDeQuartoId = ?
+        // Ele filtra só as reservas do mesmo tipo de quarto que você está tentando reservar.
+
+        // AND entradaAcomodacao < ?
+        // Aqui ele pega reservas que começaram antes da data de saída da nova reserva.
+
+        // AND saidaAcomodacao > ?
+        // Aqui ele pega reservas que terminaram depois da data de entrada da nova reserva.
+
+        // Juntando as duas condições de data
+        // Isso identifica sobreposição de períodos. Em outras palavras, se uma reserva já existente “entra antes de você sair” e “sai depois de você entrar”, então as datas se cruzam.
+
+        // SELECT COUNT(*) as quantidade
+        // Em vez de trazer as reservas, ele só conta quantas bateram com esse filtro.
 
         const parametros = [tipoDeQuartoId, saidaAcomodacao, entradaAcomodacao];
 
