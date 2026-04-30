@@ -3,6 +3,7 @@ import express from "express";
 import { PaisController } from './controllers/PaisController.js';
 import { HospedeController } from "./controllers/HospedeController.js";
 import { TipoDeQuartoController } from "./controllers/TipoDeQuartoController.js";
+import { ReservaController } from './controllers/ReservaController.js';
 import { FuncionarioController } from "./controllers/FuncionarioController.js";
 import { EstadoController } from './controllers/EstadoController.js';
 import { QuartoController } from './controllers/QuartoController.js';
@@ -24,11 +25,21 @@ routes.post('/hospede', HospedeController.create);
 routes.put('/hospede/:id', HospedeController.update);
 routes.delete('/hospede/:id', HospedeController.delete);
 
+// routes reservas Tracy
+routes.get('/reserva', ReservaController.findAll);
+routes.get('/reserva/:id', ReservaController.findByPk);
+routes.post('/reserva', ReservaController.create);
+routes.put('/reserva/:id', ReservaController.update);
+routes.delete('/reserva/:id', ReservaController.delete);
+routes.get('/reserva/hospede/:hospedeId', ReservaController.findByHospede);
+routes.get('/reserva/tipo/:tipoDeQuartoId', ReservaController.findByTipoDeQuarto);
+routes.post('/reserva/confirmar-automaticas', ReservaController.confirmarReservasAutomaticas);
+
 routes.get('/funcionario', FuncionarioController.findAll);
 routes.get('/funcionario/:id', FuncionarioController.findByPk);
 routes.post('/funcionario', FuncionarioController.create);
 routes.put('/funcionario/:id', FuncionarioController.update);
-routes.delete('/funcionario/:id', FuncionarioController.delete)
+routes.delete('/funcionario/:id', FuncionarioController.delete);
 
 routes.get('/pais', PaisController.findAll);
 routes.get('/pais/:id', PaisController.findByPk);
