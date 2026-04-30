@@ -135,7 +135,7 @@ export class ReservaService {
         const sqlQuantidadeQuartos = `
             SELECT COUNT(*) as quantidade
             FROM quartos
-            WHERE tipoDeQuartoId = ?
+            WHERE tipo_de_quarto_id = ?
         `;
 
         const quantidadeQuartosDoTipo = await this.executarContagem(sqlQuantidadeQuartos, [tipoDeQuartoId]);
@@ -147,9 +147,9 @@ export class ReservaService {
         let sqlReservasConflitantes = `
             SELECT COUNT(*) as quantidade
             FROM reservas
-            WHERE tipoDeQuartoId = ?
-              AND entradaAcomodacao < ?
-              AND saidaAcomodacao > ?
+            WHERE tipo_de_quarto_id = ?
+            AND entrada_acomodacao < ?
+            AND saida_acomodacao > ?
         `;
 
         // FROM reservas
@@ -205,9 +205,9 @@ export class ReservaService {
         let sqlConflitoDatas = `
             SELECT COUNT(*) as quantidade
             FROM reservas
-            WHERE hospedeId = ?
-              AND entradaAcomodacao < ?
-              AND saidaAcomodacao > ?
+            WHERE hospede_id = ?
+            AND entrada_acomodacao < ?
+            AND saida_acomodacao > ?
         `;
 
         const parametros = [hospedeId, saidaAcomodacao, entradaAcomodacao];
@@ -236,7 +236,7 @@ export class ReservaService {
             UPDATE reservas
             SET status = 1
             WHERE status = 0
-              AND entradaAcomodacao = ?
+              AND entrada_acomodacao = ?
         `;
 
         await sequelize.query(sqlConfirmacaoAutomatica, {
