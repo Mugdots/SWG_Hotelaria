@@ -144,24 +144,6 @@ export class ReservaService {
             AND saida_acomodacao > ?
         `;
 
-        // FROM reservas
-        // Ele olha na tabela de reservas.
-
-        // WHERE tipoDeQuartoId = ?
-        // Ele filtra só as reservas do mesmo tipo de quarto que você está tentando reservar.
-
-        // AND entradaAcomodacao < ?
-        // Aqui ele pega reservas que começaram antes da data de saída da nova reserva.
-
-        // AND saidaAcomodacao > ?
-        // Aqui ele pega reservas que terminaram depois da data de entrada da nova reserva.
-
-        // Juntando as duas condições de data
-        // Isso identifica sobreposição de períodos. Em outras palavras, se uma reserva já existente “entra antes de você sair” e “sai depois de você entrar”, então as datas se cruzam.
-
-        // SELECT COUNT(*) as quantidade
-        // Em vez de trazer as reservas, ele só conta quantas bateram com esse filtro.
-
         const parametros = [tipoDeQuartoId, saidaAcomodacao, entradaAcomodacao];
 
         if (reservaIdIgnorar != null) {
