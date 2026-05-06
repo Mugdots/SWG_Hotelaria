@@ -113,9 +113,9 @@ export class ReservaService {
 
     // Função para validar todas as regras de negócio relacionadas à reserva
     static async validarRegrasDeReserva(dadosReserva) {
-        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
         await this.verificarDisponibilidade(dadosReserva);
         await this.verificarConflitoDatas(dadosReserva);
+        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
     }
 
     // Listar todas as reservas
