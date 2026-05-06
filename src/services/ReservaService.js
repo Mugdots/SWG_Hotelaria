@@ -58,9 +58,9 @@ export class ReservaService {
         const quantidadeReservasConflitantes = await this.executarContagem(sqlReservasConflitantes, parametros);
         const disponivel = quantidadeReservasConflitantes < quantidadeQuartosDoTipo;
 
-        return {
-            disponivel
-        };
+        if (!disponivel) {
+            throw 'Não há quartos disponíveis para este tipo no período selecionado. Escolha outro período ou outro tipo de quarto.';
+        }
     }
 
     // RN02 (Conflito de Datas): Um mesmo cliente não pode ter duas reservas diferentes marcadas para os mesmos dias.
@@ -90,10 +90,9 @@ export class ReservaService {
 
         const quantidadeConflitos = await this.executarContagem(sqlConflitoDatas, parametros);
 
-        return {
-            temConflito: quantidadeConflitos > 0,
-            quantidadeConflitos
-        };
+        if (quantidadeConflitos > 0) {
+            throw 'Este hóspede já possui uma reserva para o período selecionado.';
+        }
     }
 
         // RN04 (Capacidade Máxima por Tipo de Quarto): Número de Pessoas da Reserva não pode exceder a capacidade máxima do tipo de quarto.
@@ -115,16 +114,8 @@ export class ReservaService {
     // Função para validar todas as regras de negócio relacionadas à reserva
     static async validarRegrasDeReserva(dadosReserva) {
         await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
-
-        const disponibilidade = await this.verificarDisponibilidade(dadosReserva);
-        if (!disponibilidade.disponivel) {
-            throw 'Não há quartos disponíveis para este tipo no período selecionado. Escolha outro período ou outro tipo de quarto.';
-        }
-
-        const conflitoDeDatas = await this.verificarConflitoDatas(dadosReserva);
-        if (conflitoDeDatas.temConflito) {
-            throw 'Este hóspede já possui uma reserva para o período selecionado.';
-        }
+        await this.verificarDisponibilidade(dadosReserva);
+        await this.verificarConflitoDatas(dadosReserva);
     }
 
     // Listar todas as reservas
