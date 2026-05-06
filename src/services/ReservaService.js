@@ -72,11 +72,6 @@ export class ReservaService {
             reservaIdIgnorar
         } = dadosReserva;
 
-        if (!hospedeId) {
-            throw 'Hóspede deve ser preenchido!';
-        }
-
-        this.validarPeriodoReserva(entradaAcomodacao, saidaAcomodacao);
 
         let sqlConflitoDatas = `
             SELECT COUNT(*) as quantidade
@@ -148,7 +143,8 @@ export class ReservaService {
     //Criar Reserva
     static async create(req) {
         const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
-        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status: 0 };
+        const status = this.determinarStatusAutomatico(entradaAcomodacao);
+        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status };
 
         await this.validarRegrasDeReserva(dadosNovaReserva);
 
@@ -164,7 +160,7 @@ export class ReservaService {
 
         const reservaAtual = await Reserva.findByPk(id);
         if (!reservaAtual) {
-            return null;
+            throw 'Reserva não encontrada!';
         }
 
         const dadosReservaParaValidacao = this.montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao);
@@ -174,21 +170,20 @@ export class ReservaService {
         return reservaAtual;
     }
 
-    // Apagar uma reserva só é permitido enquanto a reserva ainda possuir o status de "Pendente" (status = 0)
+    // Apagar(Cancelar) uma reserva
     static async delete(req) {
         const { id } = req.params;
         const reserva = await Reserva.findByPk(id);
         if (!reserva) {
-            return null;
-        }
-
-        if (reserva.status !== 0) {
-            throw 'Apenas reservas com status Pendente podem ser canceladas!';
+            throw 'Reserva não encontrada!';
         }
 
         await reserva.destroy();
         return reserva;
     }
+
+
+
 
     //funções que não apareceram no slide, mas que são importantes para a implementação das regras de negócio
     static async findByHospede(req) {
@@ -209,31 +204,42 @@ export class ReservaService {
         return reservas;
     }
 
-    // RN03 (Status da Reserva): Toda nova reserva entra no sistema automaticamente com o status "Pendente". O sistema realizará a confirmação automática desta reserva 10 dias antes da data de entrada prevista para o hóspede, sendo que o cancelamento direto pelo sistema só será permitido enquanto a reserva ainda possuir o status de "Pendente".
+    // RN03 (Status da Reserva): Confirma automaticamente reservas que completaram 10 dias antes da entrada
     static async confirmarReservasAutomaticas() {
         const hoje = new Date();
-        const dataLimiteConfirmacao = new Date(hoje);
-        dataLimiteConfirmacao.setDate(dataLimiteConfirmacao.getDate() + 10);
-        const dataEntradaAlvo = this.formatarData(dataLimiteConfirmacao);
-
-        const sqlConfirmacaoAutomatica = `
+        hoje.setHours(0, 0, 0, 0);
+        const dataAlvo = hoje.toISOString().slice(0, 10);
+        
+        // Confirma reservas onde (entrada_acomodacao - 10 dias) = hoje
+        const sql = `
             UPDATE reservas
             SET status = 1
-            WHERE status = 0
-              AND entrada_acomodacao = ?
+            WHERE status = 0 AND DATE(entrada_acomodacao, '-10 days') = ?
         `;
 
-        await sequelize.query(sqlConfirmacaoAutomatica, {
-            replacements: [dataEntradaAlvo],
+        await sequelize.query(sql, {
+            replacements: [dataAlvo],
             type: QueryTypes.UPDATE
         });
 
         return {
-            dataConfirmacao: dataEntradaAlvo,
+            dataConfirmacao: dataAlvo,
             mensagem: 'Reservas confirmadas automaticamente para 10 dias antes da entrada.'
         };
     }
 
+    // RN03: Determina se reserva deve ser auto-confirmada (entrada dentro de 10 dias)
+    static determinarStatusAutomatico(entradaAcomodacao) {
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        
+        // Parse data local sem problema de timezone
+        const [ano, mes, dia] = entradaAcomodacao.split('-').map(Number);
+        const entradaDate = new Date(ano, mes - 1, dia, 0, 0, 0, 0);
+        
+        const diasAteEntrada = Math.floor((entradaDate - hoje) / (1000 * 60 * 60 * 24));
+        return (diasAteEntrada >= 0 && diasAteEntrada <= 10) ? 1 : 0;
+    }
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
 
