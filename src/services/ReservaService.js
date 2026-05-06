@@ -59,9 +59,7 @@ export class ReservaService {
         const disponivel = quantidadeReservasConflitantes < quantidadeQuartosDoTipo;
 
         return {
-            disponivel,
-            quantidadeQuartosDoTipo,
-            quantidadeReservasConflitantes
+            disponivel
         };
     }
 
@@ -191,19 +189,6 @@ export class ReservaService {
         await reserva.destroy();
         return reserva;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //funções que não apareceram no slide, mas que são importantes para a implementação das regras de negócio
     static async findByHospede(req) {
