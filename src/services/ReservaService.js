@@ -5,110 +5,7 @@ import { TipoDeQuarto } from '../models/TipoDeQuarto.js';
 
 export class ReservaService {
 
-    static async findAll() {
-        const reservas = await Reserva.findAll({ include: { all: true, nested: true } });
-        return reservas;
-    }
-
-    static async findByPk(req) {
-        const { id } = req.params;
-        const reserva = await Reserva.findByPk(id, { include: { all: true, nested: true } });
-        return reserva;
-    }
-
-    static async create(req) {
-        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
-        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status: 0 };
-
-        await this.validarRegrasDeReserva(dadosNovaReserva);
-
-        return await Reserva.create(dadosNovaReserva);
-    }   
-
-    static async update(req) {
-        const { id } = req.params;
-        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
-
-        const dadosAtualizacao = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId };
-
-        const reservaAtual = await Reserva.findByPk(id);
-        if (!reservaAtual) {
-            return null;
-        }
-
-        const dadosReservaParaValidacao = this.montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao);
-        await this.validarRegrasDeReserva(dadosReservaParaValidacao);
-
-        await reservaAtual.update(dadosAtualizacao);
-        return reservaAtual;
-    }
-
-    static async delete(req) {
-        const { id } = req.params;
-        const reserva = await Reserva.findByPk(id);
-        if (!reserva) {
-            return null;
-        }
-
-        if (reserva.status !== 0) {
-            throw 'Apenas reservas com status Pendente podem ser canceladas!';
-        }
-
-        await reserva.destroy();
-        return reserva;
-    }
-
-    static async findByHospede(req) {
-        const { hospedeId } = req.params;
-        const reservas = await Reserva.findAll({
-            where: { hospedeId },
-            include: { all: true, nested: true }
-        });
-        return reservas;
-    }
-
-    static async findByTipoDeQuarto(req) {
-        const { tipoDeQuartoId } = req.params;
-        const reservas = await Reserva.findAll({
-            where: { tipoDeQuartoId },
-            include: { all: true, nested: true }
-        });
-        return reservas;
-    }
-
-
-    static async validarRegrasDeReserva(dadosReserva) {
-        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
-
-        const disponibilidade = await this.verificarDisponibilidade(dadosReserva);
-        if (!disponibilidade.disponivel) {
-            throw 'Não há quartos disponíveis para este tipo no período selecionado. Escolha outro período ou outro tipo de quarto.';
-        }
-
-        const conflitoDeDatas = await this.verificarConflitoDatas(dadosReserva);
-        if (conflitoDeDatas.temConflito) {
-            throw 'Este hóspede já possui uma reserva para o período selecionado.';
-        }
-    }
-
-    static montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao) {
-        return {
-            ...reservaAtual.toJSON(),
-            ...dadosAtualizacao,
-            reservaIdIgnorar: reservaAtual.id
-        };
-    }
-    
-    static validarPeriodoReserva(entradaAcomodacao, saidaAcomodacao) {
-
-        const dataEntrada = new Date(entradaAcomodacao);
-        const dataSaida = new Date(saidaAcomodacao);
-
-        if (dataEntrada >= dataSaida) {
-            throw 'A data de saída deve ser maior que a data de entrada!';
-        }
-    }
-
+    // Função auxiliar para executar consultas de contagem
     static async executarContagem(sql, parametros) {
         const resultado = await sequelize.query(sql, {
             replacements: parametros,
@@ -118,11 +15,18 @@ export class ReservaService {
         return Number(resultado[0].quantidade);
     }
 
+    // Função para atualizaos dados de uma reserva sem considerar a mesma
+    static montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao) {
+        return {
+            ...reservaAtual.toJSON(),
+            ...dadosAtualizacao,
+            reservaIdIgnorar: reservaAtual.id
+        };
+    }
+
     // RN01 (Disponibilidade): O hotel só pode confirmar uma nova reserva se houverem quartos vagos na categoria escolhida para o período solicitado.
     static async verificarDisponibilidade(dadosReserva) {
         const { tipoDeQuartoId, entradaAcomodacao, saidaAcomodacao, reservaIdIgnorar } = dadosReserva;
-
-        this.validarPeriodoReserva(entradaAcomodacao, saidaAcomodacao);
 
         const sqlQuantidadeQuartos = `
             SELECT COUNT(*) as quantidade
@@ -199,6 +103,127 @@ export class ReservaService {
         };
     }
 
+        // RN04 (Capacidade Máxima por Tipo de Quarto): Número de Pessoas da Reserva não pode exceder a capacidade máxima do tipo de quarto.
+    static async validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva) {
+        const { tipoDeQuartoId, numeroPessoas } = dadosReserva;
+
+
+        const tipoDeQuarto = await TipoDeQuarto.findByPk(tipoDeQuartoId);
+        if (!tipoDeQuarto) {
+            throw 'Tipo de quarto informado não existe!';
+        }
+
+        const capacidadeMaxima = Number(tipoDeQuarto.capacidadeMax);
+        if (Number(numeroPessoas) > capacidadeMaxima) {
+            throw `O número de pessoas informado (${numeroPessoas}) excede a capacidade máxima do tipo de quarto (${capacidadeMaxima}).`;
+        }
+    }
+
+    // Função para validar todas as regras de negócio relacionadas à reserva
+    static async validarRegrasDeReserva(dadosReserva) {
+        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
+
+        const disponibilidade = await this.verificarDisponibilidade(dadosReserva);
+        if (!disponibilidade.disponivel) {
+            throw 'Não há quartos disponíveis para este tipo no período selecionado. Escolha outro período ou outro tipo de quarto.';
+        }
+
+        const conflitoDeDatas = await this.verificarConflitoDatas(dadosReserva);
+        if (conflitoDeDatas.temConflito) {
+            throw 'Este hóspede já possui uma reserva para o período selecionado.';
+        }
+    }
+
+    // Listar todas as reservas
+    static async findAll() {
+        const reservas = await Reserva.findAll({ include: { all: true, nested: true } });
+        return reservas;
+    }
+
+    // Buscar reserva por ID
+    static async findByPk(req) {
+        const { id } = req.params;
+        const reserva = await Reserva.findByPk(id, { include: { all: true, nested: true } });
+        return reserva;
+    }
+
+    //Criar Reserva
+    static async create(req) {
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status: 0 };
+
+        await this.validarRegrasDeReserva(dadosNovaReserva);
+
+        return await Reserva.create(dadosNovaReserva);
+    }   
+
+    //Atualizar Reserva
+    static async update(req) {
+        const { id } = req.params;
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+
+        const dadosAtualizacao = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId };
+
+        const reservaAtual = await Reserva.findByPk(id);
+        if (!reservaAtual) {
+            return null;
+        }
+
+        const dadosReservaParaValidacao = this.montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao);
+        await this.validarRegrasDeReserva(dadosReservaParaValidacao);
+
+        await reservaAtual.update(dadosAtualizacao);
+        return reservaAtual;
+    }
+
+    // Apagar uma reserva só é permitido enquanto a reserva ainda possuir o status de "Pendente" (status = 0)
+    static async delete(req) {
+        const { id } = req.params;
+        const reserva = await Reserva.findByPk(id);
+        if (!reserva) {
+            return null;
+        }
+
+        if (reserva.status !== 0) {
+            throw 'Apenas reservas com status Pendente podem ser canceladas!';
+        }
+
+        await reserva.destroy();
+        return reserva;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //funções que não apareceram no slide, mas que são importantes para a implementação das regras de negócio
+    static async findByHospede(req) {
+        const { hospedeId } = req.params;
+        const reservas = await Reserva.findAll({
+            where: { hospedeId },
+            include: { all: true, nested: true }
+        });
+        return reservas;
+    }
+
+    static async findByTipoDeQuarto(req) {
+        const { tipoDeQuartoId } = req.params;
+        const reservas = await Reserva.findAll({
+            where: { tipoDeQuartoId },
+            include: { all: true, nested: true }
+        });
+        return reservas;
+    }
+
     // RN03 (Status da Reserva): Toda nova reserva entra no sistema automaticamente com o status "Pendente". O sistema realizará a confirmação automática desta reserva 10 dias antes da data de entrada prevista para o hóspede, sendo que o cancelamento direto pelo sistema só será permitido enquanto a reserva ainda possuir o status de "Pendente".
     static async confirmarReservasAutomaticas() {
         const hoje = new Date();
@@ -224,21 +249,6 @@ export class ReservaService {
         };
     }
 
-    // RN04 (Capacidade Máxima por Tipo de Quarto): Número de Pessoas da Reserva não pode exceder a capacidade máxima do tipo de quarto.
-    static async validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva) {
-        const { tipoDeQuartoId, numeroPessoas } = dadosReserva;
-
-
-        const tipoDeQuarto = await TipoDeQuarto.findByPk(tipoDeQuartoId);
-        if (!tipoDeQuarto) {
-            throw 'Tipo de quarto informado não existe!';
-        }
-
-        const capacidadeMaxima = Number(tipoDeQuarto.capacidadeMax);
-        if (Number(numeroPessoas) > capacidadeMaxima) {
-            throw `O número de pessoas informado (${numeroPessoas}) excede a capacidade máxima do tipo de quarto (${capacidadeMaxima}).`;
-        }
-    }
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
 
