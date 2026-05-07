@@ -7,6 +7,7 @@ import { ReservaController } from './controllers/ReservaController.js';
 import { FuncionarioController } from "./controllers/FuncionarioController.js";
 import { EstadoController } from './controllers/EstadoController.js';
 import { QuartoController } from './controllers/QuartoController.js';
+import { EstadiaController } from './controllers/EstadiaController.js';
 
 const routes = express.Router();
 
@@ -58,5 +59,11 @@ routes.get('/quarto/:id', QuartoController.findByPk);
 routes.post('/quarto', QuartoController.create);
 routes.put('/quarto/:id', QuartoController.update);
 routes.delete('/quarto/:id', QuartoController.delete);
+
+routes.get('/estadia', EstadiaController.findAll);
+routes.get('/estadia/:id', EstadiaController.findByPk);
+routes.post('/estadia', EstadiaController.create);
+routes.put('/estadia/:id', EstadiaController.update);
+routes.delete('/estadia/:id', EstadiaController.delete);
 
 export default routes;

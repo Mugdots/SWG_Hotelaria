@@ -165,6 +165,24 @@ function databaseInserts() {
             estadoId: 4
         });
 
+        const hospede5 = await Hospede.create({ 
+            nome: "Manoel Gomes", 
+            cpfPassaporte: "5555DD",
+            email: "email5@gmail.com",
+            telefone: "(55) 55555-5555",
+            nascimento: "2005-05-05",
+            estadoId: 4
+        });
+
+        const hospede6 = await Hospede.create({ 
+            nome: "Getúlio Vargas", 
+            cpfPassaporte: "6666DD",
+            email: "email6@gmail.com",
+            telefone: "(66) 66666-6666",
+            nascimento: "2006-06-06",
+            estadoId: 4
+        });
+
         // Inserindo Reserva no banco de dados de forma direta
         const reserva1 = await Reserva.create({ 
             entradaAcomodacao: "2026-10-15",
@@ -194,6 +212,24 @@ function databaseInserts() {
         });
 
         const reserva4 = await Reserva.create({ 
+            entradaAcomodacao: "2026-04-30",
+            saidaAcomodacao: "2026-05-02",
+            numeroPessoas: "3",
+            observacao: "Check-in com preferência por quarto silencioso.",
+            hospedeId: 4,
+            tipoDeQuartoId: 3
+        });
+
+        const reserva5 = await Reserva.create({ 
+            entradaAcomodacao: "2026-04-30",
+            saidaAcomodacao: "2026-05-02",
+            numeroPessoas: "3",
+            observacao: "Check-in com preferência por quarto silencioso.",
+            hospedeId: 4,
+            tipoDeQuartoId: 3
+        });
+
+        const reserva6 = await Reserva.create({ 
             entradaAcomodacao: "2026-04-30",
             saidaAcomodacao: "2026-05-02",
             numeroPessoas: "3",
@@ -240,9 +276,23 @@ function databaseInserts() {
             tipoDeQuartoId: tipoDeQuarto4.id
         });
 
+        const q5 = await Quarto.create({ 
+            numero: "406", 
+            andar: 4,
+            status_quarto: "Disponivel",
+            tipoDeQuartoId: tipoDeQuarto4.id
+        });
+
+        const q6 = await Quarto.create({ 
+            numero: "407", 
+            andar: 4,
+            status_quarto: "Disponivel",
+            tipoDeQuartoId: tipoDeQuarto4.id
+        });
+
         const estadia1 = await Estadia.create({
             checkIn: "2026-10-15",
-            checkOut: "2026-10-20",
+            //checkOut: "2026-10-20",
             valorTotalEstadia: 5 * 850, // suite master
             quartoId: q1.id,
             funcionarioId: f1.id,
@@ -250,7 +300,7 @@ function databaseInserts() {
             hospedeId: reserva1.Hospede
         });
 
-        const estadia2 = await Estadia.create({
+        /*const estadia2 = await Estadia.create({
             checkIn: "2026-09-15",
             checkOut: "2026-09-25",
             valorTotalEstadia: 10 * 250,
@@ -283,11 +333,11 @@ function databaseInserts() {
             valorTotalEstadia: 2 * 180,
             quartoId: q1.id,
             funcionarioId: f2.id // sem reserva
-        });
+        });*/
 
 
 
-        // const ol1 = await OrdemLimpeza.create({status: "Concluido", observacao:"SADASDASDASDASDASDASD", inicio:"2026-02-22 08:32:45", fim:"2026-02-22 10:32:25", funcionarioId: 1, quartoId: 1});
+        const ol1 = await OrdemLimpeza.create({status: "Concluido", observacao:"SADASDASDASDASDASDASD", inicio:"2026-02-22 08:32:45", fim:"2026-02-22 10:32:25", funcionarioId: 1, quartoId: 1});
         // const ol2 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-25 07:32:45", fim:"2026-02-25 9:28:25", funcionarioId: 2, quartoId: 1});
         // const ol3 = await OrdemLimpeza.create({status: "Não Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 19:00:00", funcionarioId: 3, quartoId: 2});
         // const ol4 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 10:32:25", funcionarioId: 3, quartoId: 2});

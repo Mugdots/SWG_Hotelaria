@@ -1,37 +1,37 @@
-import { EstadoService } from "../services/EstadoService.js";
+import { EstadiaService } from "../services/EstadiaService.js";
 
-class EstadoController {
+class EstadiaController {
 
     static async findAll(req, res, next) {
-        EstadoService.findAll()
+        EstadiaService.findAll()
             .then(objs => res.json(objs))
             .catch(next);
     }
 
     static async findByPk(req, res, next) {
-        EstadoService.findByPk(req)
+        EstadiaService.findByPk(req)
             .then(objs => res.json(objs))
             .catch(next);
     }
 
     static async create(req, res, next) {
-        EstadoService.create(req)
+        EstadiaService.create(req)
             .then(objs => res.json(objs))
             .catch(next);
     }
 
     static async update(req, res, next) {
-        EstadoService.update(req)
+        EstadiaService.update(req)
             .then(obj => res.json(obj))
             .catch(next);
     }
 
     static async delete(req, res, next) {
-        EstadoService.delete(req)
+        EstadiaService.delete(req)
             .then(obj => res.json(obj))
             .catch(next);
     }
 
 }
 
-export { EstadoController }
+export { EstadiaController }
