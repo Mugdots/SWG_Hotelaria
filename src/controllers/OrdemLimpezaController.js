@@ -14,6 +14,18 @@ class OrdemLimpezaController {
             .catch(next);
     }
 
+    static async findByFuncionario(req, res, next) {
+        OrdemLimpezaService.findByFuncionario(req)
+            .then(objs => res.json(objs))
+            .catch(next);
+    }
+
+    static async findByQuarto(req, res, next) {
+        OrdemLimpezaService.findByQuarto(req)
+            .then(objs => res.json(objs))
+            .catch(next);
+    }
+
     static async create(req, res, next) {
         OrdemLimpezaService.create(req)
             .then(objs => res.json(objs))

@@ -8,6 +8,7 @@ import { FuncionarioController } from "./controllers/FuncionarioController.js";
 import { EstadoController } from './controllers/EstadoController.js';
 import { QuartoController } from './controllers/QuartoController.js';
 import { EstadiaController } from './controllers/EstadiaController.js';
+import { OrdemLimpezaController } from "./controllers/OrdemLimpezaController.js";
 
 const routes = express.Router();
 
@@ -59,6 +60,14 @@ routes.get('/quarto/:id', QuartoController.findByPk);
 routes.post('/quarto', QuartoController.create);
 routes.put('/quarto/:id', QuartoController.update);
 routes.delete('/quarto/:id', QuartoController.delete);
+
+routes.get('/ordemlimpeza', OrdemLimpezaController.findAll);
+routes.get('/ordemlimpeza/:id', OrdemLimpezaController.findByPk);
+routes.post('/ordemlimpeza', OrdemLimpezaController.create);
+routes.put('/ordemlimpeza/:id', OrdemLimpezaController.update);
+routes.delete('/ordemlimpeza/:id', OrdemLimpezaController.delete);
+routes.get('/ordemlimpeza/quarto/:id', OrdemLimpezaController.findByQuarto);
+routes.get('/ordemlimpeza/funcionario/:id', OrdemLimpezaController.findByFuncionario);
 
 routes.get('/estadia', EstadiaController.findAll);
 routes.get('/estadia/:id', EstadiaController.findByPk);
