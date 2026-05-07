@@ -85,7 +85,7 @@ class OrdemLimpezaService {
 
     static async update(req, res) {
         const { id } = req.params;
-        const { id, status, observacao, inicio, fim, funcionarioId, quartoId } = req.body;
+        const { status, observacao, inicio, fim, funcionarioId, quartoId } = req.body;
         const obj = await OrdemLimpeza.findByPk(id, {include: {all: true, nested: true } });
         if (obj == null) throw 'Ordem de Limpeza não encontrado!';
         Object.assign(obj, {id, status, observacao, inicio, fim, funcionarioId, quartoId});
