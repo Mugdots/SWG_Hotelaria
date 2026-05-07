@@ -12,6 +12,11 @@ class QuartoService {
         return obj;
     }   
 
+    static async findByIdAndInterruped(id, status_quarto) {
+        const objs = await Quarto.findAll({where: {id:id, status_quarto:status_quarto}});
+        return objs;
+    }
+
     static async create(req, res) {     
         const { numero, andar, status_quarto, tipoDeQuartoId } = req.body;
         const obj = await Quarto.create({numero, andar, status_quarto, tipoDeQuartoId});
