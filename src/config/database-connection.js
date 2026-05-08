@@ -162,7 +162,7 @@ function databaseInserts() {
             email: "email4@gmail.com",
             telefone: "(44) 44444-4444",
             nascimento: "2004-04-04",
-            estadoId: 4
+            estadoId: 2
         });
 
         const hospede5 = await Hospede.create({ 
@@ -171,7 +171,7 @@ function databaseInserts() {
             email: "email5@gmail.com",
             telefone: "(55) 55555-5555",
             nascimento: "2005-05-05",
-            estadoId: 4
+            estadoId: 1
         });
 
         const hospede6 = await Hospede.create({ 
@@ -180,7 +180,7 @@ function databaseInserts() {
             email: "email6@gmail.com",
             telefone: "(66) 66666-6666",
             nascimento: "2006-06-06",
-            estadoId: 4
+            estadoId: 2
         });
 
         // Inserindo Reserva no banco de dados de forma direta
@@ -221,21 +221,21 @@ function databaseInserts() {
         });
 
         const reserva5 = await Reserva.create({ 
-            entradaAcomodacao: "2026-04-30",
-            saidaAcomodacao: "2026-05-02",
-            numeroPessoas: "3",
-            observacao: "Check-in com preferência por quarto silencioso.",
+            entradaAcomodacao: "2027-01-25",
+            saidaAcomodacao: "2027-02-02",
+            numeroPessoas: "2",
+            observacao: "Sem observações.",
             hospedeId: 4,
-            tipoDeQuartoId: 3
+            tipoDeQuartoId: 4
         });
 
         const reserva6 = await Reserva.create({ 
-            entradaAcomodacao: "2026-04-30",
-            saidaAcomodacao: "2026-05-02",
+            entradaAcomodacao: "2026-07-30",
+            saidaAcomodacao: "2026-08-02",
             numeroPessoas: "3",
-            observacao: "Check-in com preferência por quarto silencioso.",
-            hospedeId: 4,
-            tipoDeQuartoId: 3
+            observacao: "Preferência por quarto com varanda.",
+            hospedeId: 2,
+            tipoDeQuartoId: 1
         });
 
         const f1 = await Funcionario.create({ nome: "Funcionário João", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
@@ -287,7 +287,7 @@ function databaseInserts() {
             numero: "407", 
             andar: 4,
             status_quarto: "Disponivel",
-            tipoDeQuartoId: tipoDeQuarto4.id
+            tipoDeQuartoId: tipoDeQuarto5.id
         });
 
         const estadia1 = await Estadia.create({

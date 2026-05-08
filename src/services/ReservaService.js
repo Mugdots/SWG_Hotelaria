@@ -5,6 +5,82 @@ import { TipoDeQuarto } from '../models/TipoDeQuarto.js';
 
 export class ReservaService {
 
+    // Listar todas as reservas
+    static async findAll() {
+        const reservas = await Reserva.findAll({ include: { all: true, nested: true } });
+        return reservas;
+    }
+
+    // Buscar reserva por ID
+    static async findByPk(req) {
+        const { id } = req.params;
+        const reserva = await Reserva.findByPk(id, { include: { all: true, nested: true } });
+        return reserva;
+    }
+
+    //Criar Reserva
+    static async create(req) {
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+        const status = this.determinarStatusAutomatico(entradaAcomodacao);
+        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status };
+
+        await this.validarRegrasDeReserva(dadosNovaReserva);
+
+        return await Reserva.create(dadosNovaReserva);
+    }   
+
+    //Atualizar Reserva
+    static async update(req) {
+        const { id } = req.params;
+        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
+
+        const dadosAtualizacao = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId };
+
+        const reservaAtual = await Reserva.findByPk(id);
+        if (!reservaAtual) {
+            throw 'Reserva não encontrada!';
+        }
+
+        const dadosReservaParaValidacao = this.montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao);
+        await this.validarRegrasDeReserva(dadosReservaParaValidacao);
+
+        await reservaAtual.update(dadosAtualizacao);
+        return reservaAtual;
+    }
+
+    // Apagar(Cancelar) uma reserva
+    static async delete(req) {
+        const { id } = req.params;
+        const reserva = await Reserva.findByPk(id);
+        if (!reserva) {
+            throw 'Reserva não encontrada!';
+        }
+
+        await reserva.destroy();
+        return reserva;
+    }
+
+    //funções que não apareceram no slide, mas que são importantes para a implementação das regras de negócio
+    static async findByHospede(req) {
+        const { hospedeId } = req.params;
+        const reservas = await Reserva.findAll({
+            where: { hospedeId },
+            include: { all: true, nested: true }
+        });
+        return reservas;
+    }
+
+    static async findByTipoDeQuarto(req) {
+        const { tipoDeQuartoId } = req.params;
+        const reservas = await Reserva.findAll({
+            where: { tipoDeQuartoId },
+            include: { all: true, nested: true }
+        });
+        return reservas;
+    }
+
+
+
     // Função auxiliar para executar consultas de contagem
     static async executarContagem(sql, parametros) {
         const resultado = await sequelize.query(sql, {
@@ -111,90 +187,6 @@ export class ReservaService {
         }
     }
 
-    // Função para validar todas as regras de negócio relacionadas à reserva
-    static async validarRegrasDeReserva(dadosReserva) {
-        await this.verificarDisponibilidade(dadosReserva);
-        await this.verificarConflitoDatas(dadosReserva);
-        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
-    }
-
-    // Listar todas as reservas
-    static async findAll() {
-        const reservas = await Reserva.findAll({ include: { all: true, nested: true } });
-        return reservas;
-    }
-
-    // Buscar reserva por ID
-    static async findByPk(req) {
-        const { id } = req.params;
-        const reserva = await Reserva.findByPk(id, { include: { all: true, nested: true } });
-        return reserva;
-    }
-
-    //Criar Reserva
-    static async create(req) {
-        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
-        const status = this.determinarStatusAutomatico(entradaAcomodacao);
-        const dadosNovaReserva = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId, status };
-
-        await this.validarRegrasDeReserva(dadosNovaReserva);
-
-        return await Reserva.create(dadosNovaReserva);
-    }   
-
-    //Atualizar Reserva
-    static async update(req) {
-        const { id } = req.params;
-        const { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId } = req.body;
-
-        const dadosAtualizacao = { entradaAcomodacao, saidaAcomodacao, numeroPessoas, observacao, hospedeId, tipoDeQuartoId };
-
-        const reservaAtual = await Reserva.findByPk(id);
-        if (!reservaAtual) {
-            throw 'Reserva não encontrada!';
-        }
-
-        const dadosReservaParaValidacao = this.montarDadosReservaParaValidacao(reservaAtual, dadosAtualizacao);
-        await this.validarRegrasDeReserva(dadosReservaParaValidacao);
-
-        await reservaAtual.update(dadosAtualizacao);
-        return reservaAtual;
-    }
-
-    // Apagar(Cancelar) uma reserva
-    static async delete(req) {
-        const { id } = req.params;
-        const reserva = await Reserva.findByPk(id);
-        if (!reserva) {
-            throw 'Reserva não encontrada!';
-        }
-
-        await reserva.destroy();
-        return reserva;
-    }
-
-
-
-
-    //funções que não apareceram no slide, mas que são importantes para a implementação das regras de negócio
-    static async findByHospede(req) {
-        const { hospedeId } = req.params;
-        const reservas = await Reserva.findAll({
-            where: { hospedeId },
-            include: { all: true, nested: true }
-        });
-        return reservas;
-    }
-
-    static async findByTipoDeQuarto(req) {
-        const { tipoDeQuartoId } = req.params;
-        const reservas = await Reserva.findAll({
-            where: { tipoDeQuartoId },
-            include: { all: true, nested: true }
-        });
-        return reservas;
-    }
-
     // RN03 (Status da Reserva): Confirma automaticamente reservas que completaram 10 dias antes da entrada
     static async confirmarReservasAutomaticas() {
         const hoje = new Date();
@@ -234,4 +226,10 @@ export class ReservaService {
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
 
+    // Função para validar todas as regras de negócio relacionadas à reserva
+    static async validarRegrasDeReserva(dadosReserva) {
+        await this.verificarDisponibilidade(dadosReserva);
+        await this.verificarConflitoDatas(dadosReserva);
+        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
+    }
 }
