@@ -226,10 +226,77 @@ export class ReservaService {
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
 
-    // Função para validar todas as regras de negócio relacionadas à reserva
-    static async validarRegrasDeReserva(dadosReserva) {
-        await this.verificarDisponibilidade(dadosReserva);
-        await this.verificarConflitoDatas(dadosReserva);
-        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
+
+    
+    // RELATÓRIO 1: Reservas por período com filtros opcionais
+    static async getRelatorioReservasPorPeriodo(req) {
+        const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.query;
+        
+        const sql = `
+            SELECT 
+                r.id AS idReserva,
+                h.nome AS nomeHospede,
+                tq.nome AS tipoQuarto,
+                r.entrada_acomodacao AS dataEntrada,
+                r.saida_acomodacao AS dataSaida,
+                CASE 
+                    WHEN r.status = 0 THEN 'Pendente'
+                    WHEN r.status = 1 THEN 'Confirmada'
+                END AS status
+            FROM reservas r
+            INNER JOIN hospedes h ON r.hospede_id = h.id
+            INNER JOIN tipos_de_quartos tq ON r.tipo_de_quarto_id = tq.id
+            WHERE 1=1
+              AND (r.entrada_acomodacao >= :dataInicio OR :dataInicio IS NULL)
+              AND (r.saida_acomodacao <= :dataFim OR :dataFim IS NULL)
+              AND (r.hospede_id = :hospedeId OR :hospedeId IS NULL)
+              AND (r.tipo_de_quarto_id = :tipoDeQuartoId OR :tipoDeQuartoId IS NULL)
+            ORDER BY r.entrada_acomodacao ASC
+        `;
+
+        try {
+            const resultado = await sequelize.query(sql, {
+                replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null, hospedeId: hospedeId || null, tipoDeQuartoId: tipoDeQuartoId || null },
+                type: QueryTypes.SELECT
+            });
+            return resultado;
+        } catch (erro) {
+            throw `Erro ao buscar relatório de reservas: ${erro.message}`;
+        }
+    }
+
+    // RELATÓRIO 2: Faturamento por tipo de acomodação (apenas confirmadas)
+    static async getRelatorioFaturamentoPorTipo(req) {
+        const { dataInicio, dataFim } = req.query;
+        
+        const sql = `
+            SELECT 
+                tq.nome AS tipoAcomodacao,
+                COUNT(r.id) AS quantidadeReservas,
+                ROUND(tq.preco_diaria, 2) AS precoDiaria,
+                ROUND(
+                    SUM(
+                        (JULIANDAY(r.saida_acomodacao) - JULIANDAY(r.entrada_acomodacao)) * tq.preco_diaria
+                    ),
+                    2
+                ) AS totalProjetado
+            FROM reservas r
+            INNER JOIN tipos_de_quartos tq ON r.tipo_de_quarto_id = tq.id
+            WHERE r.status = 1
+              AND (r.entrada_acomodacao >= :dataInicio OR :dataInicio IS NULL)
+              AND (r.saida_acomodacao <= :dataFim OR :dataFim IS NULL)
+            GROUP BY tq.id, tq.nome, tq.preco_diaria
+            ORDER BY totalProjetado DESC
+        `;
+
+        try {
+            const resultado = await sequelize.query(sql, {
+                replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null },
+                type: QueryTypes.SELECT
+            });
+            return resultado;
+        } catch (erro) {
+            throw `Erro ao buscar relatório de faturamento: ${erro.message}`;
+        }
     }
 }
