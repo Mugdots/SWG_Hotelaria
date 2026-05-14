@@ -67,7 +67,11 @@ routes.post('/ordemlimpeza', OrdemLimpezaController.create);
 routes.put('/ordemlimpeza/:id', OrdemLimpezaController.update);
 routes.delete('/ordemlimpeza/:id', OrdemLimpezaController.delete);
 routes.get('/ordemlimpeza/quarto/:id', OrdemLimpezaController.findByQuarto);
-routes.get('/ordemlimpeza/funcionario/:id', OrdemLimpezaController.findByFuncionario);
+routes.get('/ordemlimpezas/funcionario/:id', OrdemLimpezaController.findByFuncionario);
+routes.get('/ordemlimpeza/findByQuartoAndPeriodo/:quartoId/:inicio_rela/:fim_rela', OrdemLimpezaController.findByQuartoAndPeriodo);
+routes.get('/ordemlimpeza/findByFuncionarioAndPeriodo/:funcionarioId/:inicio_rela/:fim_rela', OrdemLimpezaController.findByFuncionarioAndPeriodo);
+routes.get('/ordemlimpeza/findByQuartoAndFuncionarioAndPeriodo/:funcionarioId/:quartoId/:inicio_rela/:fim_rela', OrdemLimpezaController.findByQuartoAndFuncionarioAndPeriodo);
+routes.get('/ordemlimpeza/contadorByFuncionarioAndPeriodo/:status/:inicio_rela/:fim_rela', OrdemLimpezaController.contadorByFuncionarioAndPeriodo);
 
 routes.get('/estadia', EstadiaController.findAll);
 routes.get('/estadia/:id', EstadiaController.findByPk);

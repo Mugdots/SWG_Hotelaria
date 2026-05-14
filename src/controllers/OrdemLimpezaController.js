@@ -26,6 +26,30 @@ class OrdemLimpezaController {
             .catch(next);
     }
 
+    static async findByQuartoAndFuncionarioAndPeriodo(req) {
+        OrdemLimpezaService.findByQuartoAndFuncionarioAndPeriodo(req)
+        .then(objs => res.json(objs))
+        .catch(next);
+    }
+
+    static async findByQuartoAndPeriodo(req, res, next) {
+        OrdemLimpezaService.findByQuartoAndPeriodo(req)
+        .then(objs => res.json(objs))
+        .catch(next);
+    }
+
+    static async findByFuncionarioAndPeriodo(req, res, next) {
+        OrdemLimpezaService.findByFuncionarioAndPeriodo(req)
+        .then(objs => res.json(objs))
+        .catch(next);
+    }
+
+    static async contadorByFuncionarioAndPeriodo(req, res, next) {
+        OrdemLimpezaService.contadorByFuncionarioAndPeriodo(req)
+        .then(objs => res.json(objs))
+        .catch(next);
+    }
+
     static async create(req, res, next) {
         OrdemLimpezaService.create(req)
             .then(objs => res.json(objs))
