@@ -49,6 +49,18 @@ class ReservaController {
       .then(result => res.json(result))
       .catch(next);
   }
+
+  static async getRelatorioReservasPorPeriodo(req, res, next) {
+    ReservaService.getRelatorioReservasPorPeriodo(req)
+      .then(objs => res.json(objs))
+      .catch(next);
+  }
+
+  static async getRelatorioFaturamentoPorTipo(req, res, next) {
+    ReservaService.getRelatorioFaturamentoPorTipo(req)
+      .then(objs => res.json(objs))
+      .catch(next);
+  }
 }
 
 export { ReservaController }
