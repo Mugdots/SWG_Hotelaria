@@ -226,9 +226,14 @@ export class ReservaService {
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
 
+    // Função para validar todas as regras de negócio relacionadas à reserva
+    static async validarRegrasDeReserva(dadosReserva) {
+        await this.verificarDisponibilidade(dadosReserva);
+        await this.verificarConflitoDatas(dadosReserva);
+        await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
+    }
 
-    
-    // RELATÓRIO 1: Reservas por período com filtros opcionais
+        // RELATÓRIO 1: Reservas por período com filtros opcionais
     static async getRelatorioReservasPorPeriodo(req) {
         const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.query;
         
