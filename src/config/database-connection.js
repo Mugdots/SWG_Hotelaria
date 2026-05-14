@@ -244,8 +244,8 @@ function databaseInserts() {
             status: 1
         });
 
-        const f1 = await Funcionario.create({ nome: "Funcionário João", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
-        const f2 = await Funcionario.create({ nome: "Funcionário José", data_nascimento: "1985-02-02", cpf: "444.444.444-44", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua José Figueiredo", telefone: "(22) 2222-2222" ,login: "func2", senha: "123456", paisisoId:3 });
+        const f1 = await Funcionario.create({ nome: "Funcionário Abrael", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
+        const f2 = await Funcionario.create({ nome: "Funcionário Bonuto", data_nascimento: "1985-02-02", cpf: "444.444.444-44", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua José Figueiredo", telefone: "(22) 2222-2222" ,login: "func2", senha: "123456", paisisoId:3 });
         const f3 = await Funcionario.create({ nome: "Funcionário João", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Cachoeiro de Itapemirim", bairro:"Ibitiquara", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
         const f4 = await Funcionario.create({ nome: "Funcionário José", data_nascimento: "1985-02-02", cpf: "444.444.444-44", cidade: "Marataizes",  bairro:"Abumbum", rua: "Rua José Figueiredo", telefone: "(22) 2222-2222" ,login: "func2", senha: "123456", paisisoId:4 });
         
@@ -345,7 +345,7 @@ function databaseInserts() {
 
         const ol1 = await OrdemLimpeza.create({status: "Concluido", observacao:"SADASDASDASDASDASDASD", inicio:"2026-02-22 08:32:45", fim:"2026-02-22 10:32:25", funcionarioId: 1, quartoId: 1});
         const ol2 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-25 07:32:45", fim:"2026-02-25 9:28:25", funcionarioId: 2, quartoId: 1});
-        const ol3 = await OrdemLimpeza.create({status: "Andamento", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 19:00:00", funcionarioId: 3, quartoId: 2});
+        const ol3 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 19:00:00", funcionarioId: 3, quartoId: 2});
         const ol4 = await OrdemLimpeza.create({status: "Concluido", observacao:"", inicio:"2026-02-26 08:32:45", fim:"2026-02-26 10:32:25", funcionarioId: 3, quartoId: 2});
         
 

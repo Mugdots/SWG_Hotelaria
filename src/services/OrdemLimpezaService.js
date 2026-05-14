@@ -4,6 +4,7 @@ import { QuartoController } from '../controllers/QuartoController.js';
 import {OrdemLimpeza} from '../models/OrdemLimpeza.js';
 import { FuncionarioService } from './FuncionarioService.js';
 import { QuartoService } from './QuartoService.js';
+import { QueryTypes } from 'sequelize';
 
 class OrdemLimpezaService {
     static async findAll() {
@@ -99,22 +100,10 @@ class OrdemLimpezaService {
                 console.log(ordemlimpeza.updatedAt);
             }   
         }
-
-
         
-
         if (quartoOcupado) throw 'Quarto está ocupado, não e possível fazer uma ordem de limpeza';
-
-        // let quartoNaoLimpar = false;
-        // if (quarto.status_quarto == 'Ocupado') {
-        //     quartoNaoLimpar = true;
-        // } 
-        // 
     }
-
-
     
-
     static async verificarQuarto(quartoId) {
         const [resultado] = await sequelize.query(`
             SELECT COUNT(*) AS total
@@ -129,6 +118,58 @@ class OrdemLimpezaService {
                 throw "Não e possível fazer isso"
             }
     }
+
+
+    static async findByQuartoAndFuncionarioAndPeriodo(req) {
+        const {funcionarioId, quartoId, inicio_rela, fim_rela} = req.params;
+        const objs = await sequelize.query(
+            "SELECT * FROM ordemlimpeza WHERE funcionario_Id = :funcionarioId AND quarto_Id = :quartoId AND inicio > :inicio_rela AND inicio < :fim_rela",
+            {
+                replacements: {funcionarioId, quartoId, inicio_rela, fim_rela},
+                type: QueryTypes.SELECT
+            }
+        )
+        return objs;
+    }
+
+
+    static async findByQuartoAndPeriodo(req) {
+        const {quartoId, inicio_rela, fim_rela} = req.params;
+        console.log(inicio_rela)
+        const objs = await sequelize.query(
+            "SELECT * FROM ordemlimpezas WHERE quarto_id = :quartoId AND inicio > :inicio_rela AND inicio < :fim_rela",
+            {
+                replacements: {quartoId, inicio_rela, fim_rela},
+                type: QueryTypes.SELECT
+            }
+        )
+        return objs;
+    }
+
+    static async findByFuncionarioAndPeriodo(req) {
+        const {funcionarioId, inicio_rela, fim_rela} = req.params;
+        const objs = await sequelize.query(
+            "SELECT * FROM ordemlimpezas WHERE funcionario_Id = :funcionarioId AND inicio > :inicio_rela AND inicio < :fim_rela",
+            {
+                replacements: {funcionarioId, inicio_rela, fim_rela},
+                type: QueryTypes.SELECT
+            }
+        )
+        return objs;
+    }
+
+    static async contadorByFuncionarioAndPeriodo(req) {
+        const {status, inicio_rela, fim_rela} = req.params;
+        const objs = await sequelize.query(
+            "SELECT f.nome, COUNT(ol.funcionario_id) FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND inicio > :inicio_rela AND inicio < :fim_rela GROUP BY f.nome;",
+            {
+                replacements: {status, inicio_rela, fim_rela},
+                types: QueryTypes.SELECT
+            }
+        )
+        return objs;
+    }
+
     
     static async update(req, res) {
         const { id } = req.params;
