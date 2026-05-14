@@ -560,6 +560,75 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Listar por periodo",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"entradaAcomodacao\": \"2026-05-11\",\r\n\"saidaAcomodacao\": \"2026-05-14\",\r\n\"numeroPessoas\": 3,\r\n\"observacao\": \"Reserva teste 2\",\r\n\"hospedeId\": 2,\r\n\"tipoDeQuartoId\": 3\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3333/reserva/relatorio/periodo?dataInicio=2026-01-01&dataFim=2026-07-31",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                "relatorio",
+                "periodo"
+              ],
+              "query": [
+                {
+                  "key": "dataInicio",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "dataFim",
+                  "value": "2026-07-31"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por faturamento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/reserva/relatorio/faturamento?dataInicio=2026-05-01&dataFim=2027-01-31",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3333",
+              "path": [
+                "reserva",
+                "relatorio",
+                "faturamento"
+              ],
+              "query": [
+                {
+                  "key": "dataInicio",
+                  "value": "2026-05-01"
+                },
+                {
+                  "key": "dataFim",
+                  "value": "2027-01-31"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
