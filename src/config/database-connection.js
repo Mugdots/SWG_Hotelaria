@@ -190,7 +190,8 @@ function databaseInserts() {
             numeroPessoas: "4",
             observacao: "Reserva para viagem em família.",
             hospedeId: 1,
-            tipoDeQuartoId: 5
+            tipoDeQuartoId: 5,
+            status: 1
         });
 
         const reserva2 = await Reserva.create({ 
@@ -199,7 +200,8 @@ function databaseInserts() {
             numeroPessoas: "2",
             observacao: "Hóspedes solicitam cama de casal.",
             hospedeId: 2,
-            tipoDeQuartoId: 2
+            tipoDeQuartoId: 2,
+            status: 0
         });
 
         const reserva3 = await Reserva.create({ 
@@ -208,7 +210,8 @@ function databaseInserts() {
             numeroPessoas: "1",
             observacao: "Reserva para estadia longa.",
             hospedeId: 3,
-            tipoDeQuartoId: 1
+            tipoDeQuartoId: 1,  
+            status: 1
         });
 
         const reserva4 = await Reserva.create({ 
@@ -217,7 +220,8 @@ function databaseInserts() {
             numeroPessoas: "3",
             observacao: "Check-in com preferência por quarto silencioso.",
             hospedeId: 4,
-            tipoDeQuartoId: 3
+            tipoDeQuartoId: 3,
+            status: 0
         });
 
         const reserva5 = await Reserva.create({ 
@@ -226,7 +230,8 @@ function databaseInserts() {
             numeroPessoas: "2",
             observacao: "Sem observações.",
             hospedeId: 4,
-            tipoDeQuartoId: 4
+            tipoDeQuartoId: 4,
+            status: 0
         });
 
         const reserva6 = await Reserva.create({ 
@@ -235,7 +240,8 @@ function databaseInserts() {
             numeroPessoas: "3",
             observacao: "Preferência por quarto com varanda.",
             hospedeId: 2,
-            tipoDeQuartoId: 1
+            tipoDeQuartoId: 1,
+            status: 1
         });
 
         const f1 = await Funcionario.create({ nome: "Funcionário João", data_nascimento: "1981-01-01", cpf: "333.333.333-33", cidade:"Guarapari", bairro:"Ubatuba", rua: "Rua Dr. Brício Mesquita", telefone: "(11) 1111-1111" , login: "func1", senha: "123456", paisisoId:1 });
