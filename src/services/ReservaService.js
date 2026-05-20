@@ -235,7 +235,7 @@ export class ReservaService {
 
         // RELATÓRIO 1: Reservas por período com filtros opcionais
     static async getRelatorioReservasPorPeriodo(req) {
-        const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.query;
+        const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.params;
         
         const sql = `
             SELECT 
@@ -259,20 +259,21 @@ export class ReservaService {
             ORDER BY r.entrada_acomodacao ASC
         `;
 
-        try {
-            const resultado = await sequelize.query(sql, {
-                replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null, hospedeId: hospedeId || null, tipoDeQuartoId: tipoDeQuartoId || null },
-                type: QueryTypes.SELECT
-            });
-            return resultado;
-        } catch (erro) {
-            throw `Erro ao buscar relatório de reservas: ${erro.message}`;
+        const resultado = await sequelize.query(sql, {
+            replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null, hospedeId: hospedeId || null, tipoDeQuartoId: tipoDeQuartoId || null },
+            type: QueryTypes.SELECT
+        });
+
+        if (resultado.length === 0) {
+            throw 'Nenhum item de relatório foi encontrado para essa busca.';
         }
+
+        return resultado;
     }
 
     // RELATÓRIO 2: Faturamento por tipo de acomodação (apenas confirmadas)
     static async getRelatorioFaturamentoPorTipo(req) {
-        const { dataInicio, dataFim } = req.query;
+        const { dataInicio, dataFim } = req.params;
         
         const sql = `
             SELECT 
@@ -294,14 +295,15 @@ export class ReservaService {
             ORDER BY totalProjetado DESC
         `;
 
-        try {
-            const resultado = await sequelize.query(sql, {
-                replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null },
-                type: QueryTypes.SELECT
-            });
-            return resultado;
-        } catch (erro) {
-            throw `Erro ao buscar relatório de faturamento: ${erro.message}`;
+        const resultado = await sequelize.query(sql, {
+            replacements: { dataInicio: dataInicio || null, dataFim: dataFim || null },
+            type: QueryTypes.SELECT
+        });
+
+        if (resultado.length === 0) {
+            throw 'Nenhum item de relatório foi encontrado para essa busca.';
         }
+
+        return resultado;
     }
 }
