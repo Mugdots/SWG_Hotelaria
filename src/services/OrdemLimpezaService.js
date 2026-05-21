@@ -123,7 +123,7 @@ class OrdemLimpezaService {
     static async findByQuartoAndFuncionarioAndPeriodo(req) {
         const {funcionarioId, quartoId, inicio_rela, fim_rela} = req.params;
         const objs = await sequelize.query(
-            "SELECT * FROM ordemlimpeza WHERE funcionario_Id = :funcionarioId AND quarto_Id = :quartoId AND inicio > :inicio_rela AND inicio < :fim_rela",
+            "SELECT * FROM ordemlimpezas WHERE funcionario_Id = :funcionarioId AND quarto_Id = :quartoId AND inicio > :inicio_rela AND inicio < :fim_rela",
             {
                 replacements: {funcionarioId, quartoId, inicio_rela, fim_rela},
                 type: QueryTypes.SELECT
@@ -161,12 +161,31 @@ class OrdemLimpezaService {
     static async contadorByFuncionarioAndPeriodo(req) {
         const {status, inicio_rela, fim_rela} = req.params;
         const objs = await sequelize.query(
-            "SELECT f.nome, COUNT(ol.funcionario_id) FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND inicio > :inicio_rela AND inicio < :fim_rela GROUP BY f.nome;",
-            {
-                replacements: {status, inicio_rela, fim_rela},
-                types: QueryTypes.SELECT
-            }
+             "SELECT f.nome, COUNT(ol.funcionario_id), GROUP_CONCAT(ol.inicio, ' | ') FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND ol.inicio > :inicio_rela AND ol.inicio < :fim_rela GROUP BY f.nome, ol.funcionario_id;",
+             {
+                 replacements: {status, inicio_rela, fim_rela},
+                 types: QueryTypes.SELECT
+             }
         )
+        // POSTGRESQL
+        // SELECT 
+        // f.nome,
+        // COUNT(ol.funcionario_id) AS count,
+        // ARRAY_AGG(ol.inicio) AS inicio
+        // FROM ordemlimpezas ol
+        // JOIN funcionarios f ON ol.funcionario_id = f.id
+        // WHERE ol.status = :status
+        // AND ol.inicio > :inicio_rela
+        // AND ol.inicio < :fim_rela
+        // GROUP BY f.nome, ol.funcionario_id;
+    
+        // const objs = await sequelize.query(
+        //      "SELECT f.nome, ol.inicio, COUNT(ol.funcionario_id) FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND inicio > :inicio_rela AND inicio < :fim_rela GROUP BY f.nome;",
+        //      {
+        //          replacements: {status, inicio_rela, fim_rela},
+        //          types: QueryTypes.SELECT
+        //      }
+        // )
         return objs;
     }
 

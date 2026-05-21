@@ -26,7 +26,7 @@ class OrdemLimpezaController {
             .catch(next);
     }
 
-    static async findByQuartoAndFuncionarioAndPeriodo(req) {
+    static async findByQuartoAndFuncionarioAndPeriodo(req, res, next) {
         OrdemLimpezaService.findByQuartoAndFuncionarioAndPeriodo(req)
         .then(objs => res.json(objs))
         .catch(next);

@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "bce44d3e-c770-4cd5-9df7-0bbdcf4bfb35",
+    "_postman_id": "df22a263-3e5e-4c1e-8839-33e8d45fbd94",
     "name": "SWG - Hotelaria_Request01",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "54077987"
+    "_exporter_id": "55087447",
+    "_collection_link": "https://go.postman.co/collection/55087447-df22a263-3e5e-4c1e-8839-33e8d45fbd94?source=collection_link"
   },
   "item": [
     {
@@ -649,6 +650,51 @@
                 "2027-01-31"
               ]
             }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Relatórios Ordem Limpeza",
+      "item": [
+        {
+          "name": "Ordem Limpeza Relatório 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "postman-echo.com/get",
+              "host": [
+                "postman-echo",
+                "com"
+              ],
+              "path": [
+                "get"
+              ]
+            },
+            "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+          },
+          "response": []
+        },
+        {
+          "name": "Ordem Limpeza Relatório 1",
+          "request": {
+            "method": "GET",
+            "header": []
           },
           "response": []
         }
