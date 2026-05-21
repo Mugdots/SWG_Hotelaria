@@ -46,8 +46,8 @@ routes.get('/reserva/relatorio/periodo', ReservaController.getRelatorioReservasP
 routes.get('/reserva/relatorio/faturamento/:dataInicio/:dataFim', ReservaController.getRelatorioFaturamentoPorTipo);
 routes.get('/reserva/relatorio/faturamento', ReservaController.getRelatorioFaturamentoPorTipo);
 
-
-
+routes.get('/estadia/relatorio/lucroPorEstadia/:dataInicio/:dataFim', EstadiaController.getRelatorioLucroEstadiaPorPeriodo);
+routes.get('/estadia/relatorio/procedenciaGeografica', EstadiaController.getRelatorioProcedenciaGeografica);
 
 
 routes.get('/funcionario', FuncionarioController.findAll);

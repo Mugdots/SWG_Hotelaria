@@ -32,6 +32,17 @@ class EstadiaController {
             .catch(next);
     }
 
+    static async getRelatorioLucroEstadiaPorPeriodo(req, res, next) {
+        EstadiaService.getRelatorioLucroEstadiaPorPeriodo(req)
+            .then(obj => res.json(obj))
+            .catch(next);
+    }
+
+    static async getRelatorioProcedenciaGeografica(req, res, next) {
+        EstadiaService.getRelatorioProcedenciaGeografica(req)
+            .then(obj => res.json(obj))
+            .catch(next);
+    }
 }
 
 export { EstadiaController }

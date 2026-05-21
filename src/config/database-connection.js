@@ -298,7 +298,7 @@ function databaseInserts() {
 
         const estadia1 = await Estadia.create({
             checkIn: "2026-10-15",
-            //checkOut: "2026-10-20",
+            checkOut: "2026-10-20",
             valorTotalEstadia: 5 * 850, // suite master
             quartoId: q1.id,
             funcionarioId: f1.id,
@@ -306,7 +306,7 @@ function databaseInserts() {
             hospedeId: reserva1.Hospede
         });
 
-        /*const estadia2 = await Estadia.create({
+        const estadia2 = await Estadia.create({
             checkIn: "2026-09-15",
             checkOut: "2026-09-25",
             valorTotalEstadia: 10 * 250,
@@ -333,7 +333,7 @@ function databaseInserts() {
             reservaId: reserva4.id
         });
 
-        const estadia5 = await Estadia.create({
+        /*const estadia5 = await Estadia.create({
             checkIn: "2026-12-01",
             checkOut: "2026-12-03",
             valorTotalEstadia: 2 * 180,

@@ -32,7 +32,7 @@ class EstadiaService {
             await quartoObj.update({ status_quarto: 'Ocupado' }, { transaction: t });
             await t.commit();
             return await Estadia.findByPk(obj.id, { include: { all: true, nested: true } });
-        } catch (error){
+        } catch (error) {
             await t.rollback();
             throw "Erro ao realizar a estadia!";
         }
@@ -108,6 +108,82 @@ class EstadiaService {
         if (resultado.total > 0) {
             throw "Não é possível realizar o check-out. Existe uma ordem de limpeza em andamento para este quarto!";
         }
+    }
+
+    static async getRelatorioLucroEstadiaPorPeriodo(req, res) {
+        const { dataInicio, dataFim } = req.params;
+
+        const objs = await sequelize.query(`
+        SELECT 
+            e.id,
+            e.checkOut AS dataSaida,
+            h.nome AS hospede,
+            q.numero AS quarto,
+            e.valor_total_estadia AS valorEstadia
+        FROM estadias e
+        INNER JOIN reservas r 
+            ON r.id = e.reserva_id
+        INNER JOIN hospedes h 
+            ON h.id = r.hospede_id
+        INNER JOIN quartos q 
+            ON q.id = e.quarto_id
+        WHERE e.checkOut BETWEEN :dataInicio AND :dataFim
+        ORDER BY e.checkOut ASC
+    `, {
+            replacements: { dataInicio, dataFim },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        const somaTotal = await sequelize.query(`
+        SELECT 
+            SUM(valor_total_estadia) AS somaTotal
+        FROM estadias
+        WHERE checkOut BETWEEN :dataInicio AND :dataFim
+    `, {
+            replacements: { dataInicio, dataFim },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        return {
+            estadias: objs,
+            somaTotal: somaTotal[0].somaTotal || 0
+        };
+    }
+
+    static async getRelatorioProcedenciaGeografica(req, res) {
+
+        const objs = await sequelize.query(`
+        SELECT 
+            p.nome AS pais,
+            e.nome_estado AS estado,
+            COUNT(es.id) AS qtdEstadias,
+            SUM(es.valor_total_estadia) AS receitaTotal,
+            ROUND(AVG(es.valor_total_estadia), 2) AS valorMedio
+        FROM estadias es
+
+        INNER JOIN reservas r
+            ON r.id = es.reserva_id
+
+        INNER JOIN hospedes h
+            ON h.id = r.hospede_id
+
+        INNER JOIN estados e
+            ON e.id = h.estado_id
+
+        INNER JOIN paisisos p
+            ON p.id = e.paisiso_id
+
+        GROUP BY 
+            p.nome,
+            e.nome_estado
+
+        ORDER BY 
+            receitaTotal DESC
+    `, {
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        return objs;
     }
 
 }
