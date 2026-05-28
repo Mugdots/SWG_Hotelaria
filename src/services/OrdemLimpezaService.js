@@ -161,12 +161,15 @@ class OrdemLimpezaService {
     static async contadorByFuncionarioAndPeriodo(req) {
         const {status, inicio_rela, fim_rela} = req.params;
         const objs = await sequelize.query(
-             "SELECT f.nome, COUNT(ol.funcionario_id), GROUP_CONCAT(ol.inicio, ' | ') FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND ol.inicio > :inicio_rela AND ol.inicio < :fim_rela GROUP BY f.nome, ol.funcionario_id;",
+             "SELECT f.nome, COUNT(ol.funcionario_id) AS count, ARRAY_AGG(ol.inicio) AS inicio FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND ol.inicio > :inicio_rela AND ol.inicio < :fim_rela GROUP BY f.nome, ol.funcionario_id;",
              {
                  replacements: {status, inicio_rela, fim_rela},
                  types: QueryTypes.SELECT
              }
         )
+
+        // SELECT f.nome, COUNT(ol.funcionario_id), GROUP_CONCAT(ol.inicio, ' | ') FROM ordemlimpezas ol, funcionarios f WHERE ol.funcionario_id = f.id AND ol.status = :status AND ol.inicio > :inicio_rela AND ol.inicio < :fim_rela GROUP BY f.nome, ol.funcionario_id;
+
         // POSTGRESQL
         // SELECT 
         // f.nome,
