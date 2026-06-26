@@ -136,13 +136,15 @@ class EstadiaService {
 
          const somaTotal = await sequelize.query(`
         SELECT 
-            SUM(valor_total_estadia) AS somaTotal
+            SUM(valor_total_estadia) AS "somaTotal"
         FROM estadias
         WHERE "checkOut" BETWEEN :dataInicio AND :dataFim
     `, {
             replacements: { dataInicio, dataFim },
             type: sequelize.QueryTypes.SELECT
         });
+
+        console.log(somaTotal);
 
         return {
             estadias: objs,
