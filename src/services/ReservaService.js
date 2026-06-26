@@ -187,27 +187,30 @@ export class ReservaService {
         }
     }
 
-    // RN03 (Status da Reserva): Confirma automaticamente reservas que completaram 10 dias antes da entrada
+    // RN03 (Status da Reserva): Confirma automaticamente reservas que completaram 10 dias antes da entrada ou menos
     static async confirmarReservasAutomaticas() {
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-        const dataAlvo = hoje.toISOString().slice(0, 10);
+        // 1. Fazemos a matemática das datas no próprio JavaScript
+        const limite = new Date();
+        limite.setHours(0, 0, 0, 0);
+        limite.setDate(limite.getDate() + 10); // Soma 10 dias à data de hoje
         
-        // Confirma reservas onde (entrada_acomodacao - 10 dias) = hoje
+        const dataLimiteStr = limite.toISOString().slice(0, 10);
+        
+        // 2. O SQL agora fica limpo e o banco de dados não precisa calcular nada
         const sql = `
             UPDATE reservas
             SET status = 1
-            WHERE status = 0 AND DATE(entrada_acomodacao, '-10 days') = ?
+            WHERE status = 0 AND entrada_acomodacao <= ?
         `;
 
         await sequelize.query(sql, {
-            replacements: [dataAlvo],
+            replacements: [dataLimiteStr],
             type: QueryTypes.UPDATE
         });
 
         return {
-            dataConfirmacao: dataAlvo,
-            mensagem: 'Reservas confirmadas automaticamente para 10 dias antes da entrada.'
+            dataConfirmacao: dataLimiteStr,
+            mensagem: 'Reservas pendentes com 10 dias ou menos para a entrada foram confirmadas automaticamente.'
         };
     }
 
@@ -221,7 +224,9 @@ export class ReservaService {
         const entradaDate = new Date(ano, mes - 1, dia, 0, 0, 0, 0);
         
         const diasAteEntrada = Math.floor((entradaDate - hoje) / (1000 * 60 * 60 * 24));
-        return (diasAteEntrada >= 0 && diasAteEntrada <= 10) ? 1 : 0;
+        
+        // CORREÇÃO: Se faltam 10 dias ou menos (mesmo sendo um número negativo no passado), confirma direto.
+        return (diasAteEntrada <= 10) ? 1 : 0;
     }
 
     // O horário padrão previsto para entrada é 14:00hrs e saída 12:00hrs.
@@ -233,21 +238,21 @@ export class ReservaService {
         await this.validarCapacidadeMaximaPorTipoDeQuarto(dadosReserva);
     }
 
-        // RELATÓRIO 1: Reservas por período com filtros opcionais
+    // RELATÓRIO 1: Reservas por período com filtros opcionais
     static async getRelatorioReservasPorPeriodo(req) {
-        const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.params;
-        
+        const { dataInicio, dataFim, hospedeId, tipoDeQuartoId } = req.query;  
+
         const sql = `
             SELECT 
-                r.id AS idReserva,
-                h.nome AS nomeHospede,
-                tq.nome AS tipoQuarto,
-                r.entrada_acomodacao AS dataEntrada,
-                r.saida_acomodacao AS dataSaida,
+                r.id AS "idReserva",
+                h.nome AS "nomeHospede",
+                tq.nome AS "tipoQuarto",
+                r.entrada_acomodacao AS "dataEntrada",
+                r.saida_acomodacao AS "dataSaida",
                 CASE 
                     WHEN r.status = 0 THEN 'Pendente'
                     WHEN r.status = 1 THEN 'Confirmada'
-                END AS status
+                END AS "status"
             FROM reservas r
             INNER JOIN hospedes h ON r.hospede_id = h.id
             INNER JOIN tipos_de_quartos tq ON r.tipo_de_quarto_id = tq.id
@@ -265,7 +270,7 @@ export class ReservaService {
         });
 
         if (resultado.length === 0) {
-            throw 'Nenhum item de relatório foi encontrado para essa busca.';
+            throw new Error('{"message":"Nenhum item de relatório foi encontrado para essa busca."}');
         }
 
         return resultado;
@@ -273,26 +278,28 @@ export class ReservaService {
 
     // RELATÓRIO 2: Faturamento por tipo de acomodação (apenas confirmadas)
     static async getRelatorioFaturamentoPorTipo(req) {
-        const { dataInicio, dataFim } = req.params;
+        const { dataInicio, dataFim } = req.query;
         
         const sql = `
             SELECT 
-                tq.nome AS tipoAcomodacao,
-                COUNT(r.id) AS quantidadeReservas,
-                ROUND(tq.preco_diaria, 2) AS precoDiaria,
+                tq.nome AS "tipoAcomodacao",
+                COUNT(r.id) AS "quantidadeReservas",
+                ROUND(CAST(tq.preco_diaria AS numeric), 2) AS "precoDiaria",
                 ROUND(
-                    SUM(
-                        (JULIANDAY(r.saida_acomodacao) - JULIANDAY(r.entrada_acomodacao)) * tq.preco_diaria
+                    CAST(
+                        SUM(
+                            (r.saida_acomodacao::date - r.entrada_acomodacao::date) * tq.preco_diaria
+                        ) AS numeric
                     ),
                     2
-                ) AS totalProjetado
+                ) AS "totalProjetado"
             FROM reservas r
             INNER JOIN tipos_de_quartos tq ON r.tipo_de_quarto_id = tq.id
             WHERE r.status = 1
               AND (r.entrada_acomodacao >= :dataInicio OR :dataInicio IS NULL)
               AND (r.saida_acomodacao <= :dataFim OR :dataFim IS NULL)
             GROUP BY tq.id, tq.nome, tq.preco_diaria
-            ORDER BY totalProjetado DESC
+            ORDER BY "totalProjetado" DESC
         `;
 
         const resultado = await sequelize.query(sql, {
@@ -301,7 +308,8 @@ export class ReservaService {
         });
 
         if (resultado.length === 0) {
-            throw 'Nenhum item de relatório foi encontrado para essa busca.';
+            // Mudando para lançar o erro como objeto Error (para o JSON.parse do front funcionar redondo)
+            throw new Error('{"message":"Nenhum item de relatório foi encontrado para essa busca."}');
         }
 
         return resultado;
