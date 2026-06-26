@@ -116,7 +116,7 @@ class EstadiaService {
         const objs = await sequelize.query(`
         SELECT 
             e.id,
-            e.checkOut AS dataSaida,
+            e."checkOut" AS dataSaida,
             h.nome AS hospede,
             q.numero AS quarto,
             e.valor_total_estadia AS valorEstadia
@@ -127,18 +127,18 @@ class EstadiaService {
             ON h.id = r.hospede_id
         INNER JOIN quartos q 
             ON q.id = e.quarto_id
-        WHERE e.checkOut BETWEEN :dataInicio AND :dataFim
-        ORDER BY e.checkOut ASC
+        WHERE e."checkOut" BETWEEN :dataInicio AND :dataFim
+        ORDER BY e."checkOut" ASC
     `, {
             replacements: { dataInicio, dataFim },
             type: sequelize.QueryTypes.SELECT
         });
 
-        const somaTotal = await sequelize.query(`
+         const somaTotal = await sequelize.query(`
         SELECT 
             SUM(valor_total_estadia) AS somaTotal
         FROM estadias
-        WHERE checkOut BETWEEN :dataInicio AND :dataFim
+        WHERE "checkOut" BETWEEN :dataInicio AND :dataFim
     `, {
             replacements: { dataInicio, dataFim },
             type: sequelize.QueryTypes.SELECT
@@ -158,7 +158,7 @@ class EstadiaService {
             e.nome_estado AS estado,
             COUNT(es.id) AS qtdEstadias,
             SUM(es.valor_total_estadia) AS receitaTotal,
-            ROUND(AVG(es.valor_total_estadia), 2) AS valorMedio
+            ROUND(CAST(AVG(es.valor_total_estadia) AS NUMERIC), 2) AS valorMedio
         FROM estadias es
 
         INNER JOIN reservas r
