@@ -14,10 +14,10 @@ export const databaseConfig = {
 // Configuração do banco de dados no ambiente de desenvolvimento
 export const databaseConfig = {
   dialect: 'postgres',
-  host: 'dpg-d8c6k41kh4rs738kak00-a.oregon-postgres.render.com',
-  username: 'swg_hotelaria',
-  password: 'szvwgyM1GDTiNneNN4p8aeSexW8sOpRj',
-  database: 'swg_hotelaria',
+  host: 'dpg-d902lq6gvqtc7394bcfg-a.oregon-postgres.render.com',
+  username: 'swgh_hotelaria',
+  password: 'nEjH32uf5PjmosXxjphw9ySr9OiGhDtH',
+  database: 'swgh_hotelaria',
   define: {
     timestamps: true,
     freezeTableName: true,
