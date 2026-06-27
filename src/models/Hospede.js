@@ -65,7 +65,7 @@ class Hospede extends Model {
   }
 
   static associate(models) {
-        this.belongsTo(models.estado, {as: 'estado', foreignKey: {name: 'estadoId', validate: {notNull: {msg: 'O Estado do Hospede deve ser preenchido'}}}})
+        this.belongsTo(models.estado, {as: 'estado', foreignKey: {name: 'estadoId', allowNull: false, validate: {notNull: {msg: 'O Estado do Hospede deve ser preenchido'}}}, onDelete: 'RESTRICT'});
   }
   
 }
