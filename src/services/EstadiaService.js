@@ -34,7 +34,7 @@ class EstadiaService {
             return await Estadia.findByPk(obj.id, { include: { all: true, nested: true } });
         } catch (error) {
             await t.rollback();
-            throw "Erro ao realizar a estadia!";
+            throw error;
         }
     }
 
