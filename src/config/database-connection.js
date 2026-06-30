@@ -36,8 +36,9 @@ databaseInserts().catch(console.error); // comentar quando estiver em ambiente d
 
 async function databaseInserts() {
     // Limpa todas as tabelas respeitando foreign keys
+    await sequelize.sync();
 
-    // Países
+    /* // Países
     const p1 = await PaisIso.create({ nome: "Brasil", sigla_iso2: 'BR', sigla_iso3: 'BRA', ddi_telefone: 55 });
     const p2 = await PaisIso.create({ nome: "Estados Unidos da America", sigla_iso2: 'US', sigla_iso3: 'USA', ddi_telefone: 1 });
     const p3 = await PaisIso.create({ nome: "Espanha", sigla_iso2: 'ES', sigla_iso3: 'ESP', ddi_telefone: 34 });
@@ -98,8 +99,10 @@ async function databaseInserts() {
     const ol2 = await OrdemLimpeza.create({ status: "Concluido", observacao: "", inicio: "2026-02-25 07:32:45", fim: "2026-02-25 09:28:25", funcionarioId: f2.id, quartoId: q1.id });
     const ol3 = await OrdemLimpeza.create({ status: "Concluido", observacao: "", inicio: "2026-02-26 08:32:45", fim: "2026-02-26 19:00:00", funcionarioId: f3.id, quartoId: q2.id });
     const ol4 = await OrdemLimpeza.create({ status: "Concluido", observacao: "", inicio: "2026-02-26 06:28:45", fim: "2026-02-26 10:32:25", funcionarioId: f3.id, quartoId: q2.id });
+    const ol5 = await OrdemLimpeza.create({ status: "Andamento", observacao: "", inicio: "2026-02-26 06:28:45", fim: "2026-02-26 10:32:25", funcionarioId: f3.id, quartoId: q2.id });
 
-    console.log('Seed concluído com sucesso!');
+
+    console.log('Seed concluído com sucesso!');*/
 }
 
 export default sequelize;

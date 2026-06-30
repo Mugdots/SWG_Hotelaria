@@ -1,4 +1,4 @@
-/*
+/* 
 //Configuração do Banco de Dados no Ambiente de Teste
 export const databaseConfig = {
     dialect: 'sqlite',
@@ -8,16 +8,16 @@ export const databaseConfig = {
         freezeTableName: true,
         underscored: true
     }   
-};
-*/
+}; */
 
-// Configuração do banco de dados no ambiente de desenvolvimento
+
+ // Configuração do banco de dados no ambiente de desenvolvimento
 export const databaseConfig = {
   dialect: 'postgres',
-  host: 'dpg-d902lq6gvqtc7394bcfg-a.oregon-postgres.render.com',
-  username: 'swgh_hotelaria',
-  password: 'nEjH32uf5PjmosXxjphw9ySr9OiGhDtH',
-  database: 'swgh_hotelaria',
+  host: 'dpg-d91hc83eo5us7394n5m0-a.oregon-postgres.render.com',
+  username: 'swg_hotelaria_backend_user',
+  password: '6s0kJdN4eovDoPsHUi4KxQJ7BlIYFG56',
+  database: 'swg_hotelaria_backend',
   define: {
     timestamps: true,
     freezeTableName: true,
