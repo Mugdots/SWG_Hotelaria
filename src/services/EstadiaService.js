@@ -81,7 +81,7 @@ class EstadiaService {
             const [resultado] = await sequelize.query(`
             SELECT COUNT(*) AS total
             FROM estadias
-            WHERE checkIn = :dataAtual
+            WHERE "checkIn" = :dataAtual
         `, {
                 replacements: { dataAtual },
                 type: sequelize.QueryTypes.SELECT,
