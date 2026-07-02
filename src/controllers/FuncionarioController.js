@@ -2,34 +2,34 @@ import { FuncionarioService } from "../services/FuncionarioService.js";
 
 class FuncionarioController {
 
-    static async findAll(req, res) {
+    static async findAll(req, res, next) {
         FuncionarioService.findAll()
             .then(objs => res.json(objs))
-            .catch(err => res.status(400).json({ err }));;
+            .catch(next);
     }
 
-    static async findByPk(req, res) {
-        FuncionarioService.findByPk()
+    static async findByPk(req, res, next) {
+        FuncionarioService.findByPk(req)
             .then(objs => res.json(objs))
-            .catch(err => res.status(400).json({ err }));;
+            .catch(next);
     }
 
-    static async create(req, res) {
-        FuncionarioService.create()
+    static async create(req, res, next) {
+        FuncionarioService.create(req)
             .then(objs => res.json(objs))
-            .catch(err => res.status(400).json({ err }));;
+            .catch(next);
     }
 
-    static async update(req, res) {
-        FuncionarioService.update()
+    static async update(req, res, next) {
+        FuncionarioService.update(req)
             .then(objs => res.json(objs))
-            .catch(err => res.status(400).json({ err }));;
+            .catch(next);
     }
 
-    static async delete(req, res) {
-        FuncionarioService.delete()
+    static async delete(req, res, next) {
+        FuncionarioService.delete(req)
             .then(objs => res.json(objs))
-            .catch(err => res.status(400).json({ err }));;
+            .catch(next);
     }
 }
 
