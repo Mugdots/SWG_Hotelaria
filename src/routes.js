@@ -37,14 +37,10 @@ routes.get('/reserva/hospede/:hospedeId', ReservaController.findByHospede);
 routes.get('/reserva/tipo/:tipoDeQuartoId', ReservaController.findByTipoDeQuarto);
 routes.post('/reserva/confirmar-automaticas', ReservaController.confirmarReservasAutomaticas);
 
-// routes para relatórios de reservas por período Tracy
-routes.get('/reserva/relatorio/periodo/:dataInicio/:dataFim/:hospedeId/:tipoDeQuartoId', ReservaController.getRelatorioReservasPorPeriodo);
-routes.get('/reserva/relatorio/periodo/:dataInicio/:dataFim', ReservaController.getRelatorioReservasPorPeriodo);
+// routes para relatórios Tracy
 routes.get('/reserva/relatorio/periodo', ReservaController.getRelatorioReservasPorPeriodo);
-
-//routes para relatório de faturamento por tipo de quarto Tracy
-routes.get('/reserva/relatorio/faturamento/:dataInicio/:dataFim', ReservaController.getRelatorioFaturamentoPorTipo);
 routes.get('/reserva/relatorio/faturamento', ReservaController.getRelatorioFaturamentoPorTipo);
+
 
 routes.get('/estadia/relatorio/lucroPorEstadia/:dataInicio/:dataFim', EstadiaController.getRelatorioLucroEstadiaPorPeriodo);
 routes.get('/estadia/relatorio/procedenciaGeografica', EstadiaController.getRelatorioProcedenciaGeografica);
