@@ -13,8 +13,9 @@ class FuncionarioService {
     }
 
     static async create(req, res) {
-        const { nome, data_nascimento, cpf, bairro, cidade, rua, telefone, login, senha, paisiso } = req.body;
-        const obj = await Funcionario.create({ id, nome, data_nascimento, cpf, bairro, cidade, rua, telefone, login, senha, paisiso });
+        console.log(req.body);
+        const { nome, data_nascimento, cpf, bairro, cidade, rua, telefone, login, senha, paisisoId } = req.body;
+        const obj = await Funcionario.create({ nome, data_nascimento, cpf, bairro, cidade, rua, telefone, login, senha, paisisoId });
         return await Funcionario.findByPk(obj.id, { include: { all: true, nested: true } });
     }
 
